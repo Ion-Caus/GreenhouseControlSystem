@@ -47,3 +47,6 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 
+# build files from google test
+packages/
+
