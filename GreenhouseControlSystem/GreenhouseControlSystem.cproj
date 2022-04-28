@@ -349,7 +349,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="GreenhouseConfig.h">
+    <Compile Include="LorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LoRaWANHandler.c">
