@@ -13,7 +13,7 @@
 #include <status_leds.h>
 
 // Parameters for OTAA join - You have got these in a mail from IHA
-#include "GreenhouseConfig.h"
+#include "LorawanConfig.h"
 
 void lora_handler_task( void *pvParameters );
 
