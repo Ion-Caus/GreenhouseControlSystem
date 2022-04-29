@@ -195,9 +195,9 @@
     <Compile Include="drivers\twi.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="FreeRTOS\Example\main.c.example">
+    <None Include="FreeRTOS\Example\main.c.example">
       <SubType>compile</SubType>
-    </Compile>
+    </None>
     <Compile Include="FreeRTOS\FreeRTOSTraceDriver\FreeRTOSTraceDriver.c">
       <SubType>compile</SubType>
     </Compile>
