@@ -20,6 +20,8 @@
 #include <lora_driver.h>
 #include <status_leds.h>
 
+#include "temperature.h"
+
 // define two Tasks
 void task1( void *pvParameters );
 void task2( void *pvParameters );
@@ -106,6 +108,7 @@ void initialiseSystem()
 	stdio_initialise(ser_USART0);
 	// Let's create some tasks
 	// create_tasks_and_semaphores();
+	createTemperatureTask();
 
 	// vvvvvvvvvvvvvvvvv BELOW IS LoRaWAN initialisation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	// Status Leds driver
@@ -120,7 +123,7 @@ void initialiseSystem()
 int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!!
-	printf("Program Started!!\n");
+	puts("Program Started!!\n");
 	vTaskStartScheduler(); // Initialise and run the freeRTOS scheduler. Execution should never return from here.
 
 	/* Replace with your application code */
