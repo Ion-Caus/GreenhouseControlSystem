@@ -18,7 +18,7 @@
 #include <stdio_driver.h>
 
 
-#define TEMP_DELAY_MS				(1000 * 1) // 1 sec
+#define TEMP_DELAY_MS				(200)
 
 // move to .h
 #define TEMPERATURE_TASK_STACK		( configMINIMAL_STACK_SIZE )
@@ -29,7 +29,6 @@
 
 #define TEMPERATURE_ARRAY_SIZE		(10)
 static  int16_t weightedTemperature = MIN_TEMPERATURE;
-static int16_t* temperatureArray;
 
 int16_t getTemperature() {
 	return weightedTemperature;
@@ -56,7 +55,7 @@ void temperatureTask(void* pvParameter) {
 
 	 xLastWakeTime = xTaskGetTickCount();
 	 
-	 temperatureArray = (int16_t*)malloc(TEMPERATURE_ARRAY_SIZE * sizeof(int16_t));
+	 int temperatureArray[TEMPERATURE_ARRAY_SIZE];
 	 
 	 uint8_t counter = 0; 
 	 for (;;)
@@ -79,9 +78,16 @@ void temperatureTask(void* pvParameter) {
 		 
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(10) );
 		 
-		 temperatureArray[counter] = hih8120_getTemperature_x10();
+		 int16_t temperature = hih8120_getTemperature_x10();
+		 if (temperature < MIN_TEMPERATURE*10 || temperature > MAX_TEMPERATUE*10)
+		 {
+			 // if temperature exceeds realistic values
+			 continue;
+		 }
+			
 		 
-		 printf("Temperature : %d", temperatureArray[counter]);
+		 temperatureArray[counter] = temperature;
+		 printf("Temperature : %d\n", temperatureArray[counter]);
 		 
 		 
 		 if (++counter < TEMPERATURE_ARRAY_SIZE) {
@@ -95,11 +101,11 @@ void temperatureTask(void* pvParameter) {
 		 
 		 // calculation of weighted average temperature 
 		 weightedTemperature = temperatureArray[0];
-		 for (int i = 1; i < TEMPERATURE_ARRAY_SIZE; i++) {
-			 weightedTemperature = weightedTemperature*0.8 + temperatureArray[i]*0.2;
+		 for (uint8_t i = 1; i < TEMPERATURE_ARRAY_SIZE; i++) {
+			 weightedTemperature = weightedTemperature*0.75 + temperatureArray[i]*0.25;
 		 }
 		 
-		 printf("Weighted average temperature: %d", weightedTemperature);
+		 printf("Weighted average temperature: %d\n", weightedTemperature);
 		 // ready to be taken
 		
 	 }
@@ -121,6 +127,5 @@ void createTemperatureTask(void) {
 }
 
 void tempeperature_destory() {
-	free(temperatureArray);
 	hih8120_destroy();
 }
