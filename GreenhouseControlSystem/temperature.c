@@ -17,7 +17,7 @@
 #include <stdio_driver.h>
 
 
-#define TEMP_DELAY_MS				(1000 * 5) // 5 sec
+#define TEMP_DELAY_MS				(1000 * 1) // 1 sec
 
 // move to .h
 #define TEMPERATURE_TASK_STACK		( configMINIMAL_STACK_SIZE )
@@ -47,11 +47,29 @@ void temperatureTask(void* pvParameter) {
 	 int16_t temperature = 0;
 	 
 	 for (;;)
-	 {
-		 xTaskDelayUntil( &xLastWakeTime, xFrequency );
+	 { 
+		  xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(50) );
+		 
+		 hih8120_driverReturnCode_t returnCode;
+		 if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
+			 printf("Temperature Driver failed to wake up, %s\n", returnCode);
+			 continue;
+		 }
+		 
+		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(100) );
+		 
+		 if (HIH8120_OK != (returnCode = hih8120_measure()) {
+			 printf("Temperature Driver failed to measure, %s\n", returnCode);
+			 continue;
+		 }
+		 
+		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(10) );
+		 
 		 
 		 temperature = hih8120_getTemperature();
 		 printf("Temperature : %d", temperature);
+		
+		 xTaskDelayUntil( &xLastWakeTime, xFrequency );
 	 }
 }
 
@@ -68,3 +86,4 @@ void createTemperatureTask(void) {
 		NULL
 	);
 }
+
