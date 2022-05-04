@@ -29,7 +29,7 @@
 #define MAX_TEMPERATUE				(40 * 10)
 
 #define TEMPERATURE_ARRAY_SIZE		(10)
-static  int16_t weightedTemperature;
+static int16_t weightedTemperature;
 
 int16_t getTemperature() {
 	return weightedTemperature;
