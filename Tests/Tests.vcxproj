@@ -37,6 +37,7 @@
     <IncludePath>C:\VIA\SEMESTER4\SEP4\Code\GreenhouseControlSystem\GreenhouseControlSystem;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="temperatureTests.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>

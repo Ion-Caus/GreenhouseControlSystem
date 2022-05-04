@@ -9,6 +9,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include <ATMEGA_FreeRTOS.h>
 #include <task.h>
@@ -24,14 +25,23 @@
 #define TEMPERATURE_TASK_STACK		( configMINIMAL_STACK_SIZE )
 #define TEMPERATURE_TASK_PRIORITY	( tskIDLE_PRIORITY + 1 )
 
-#define MIN_TEMPERATURE				(-20)
-#define MAX_TEMPERATUE				(40)
+#define MIN_TEMPERATURE				(-20 * 10)
+#define MAX_TEMPERATUE				(40 * 10)
 
 #define TEMPERATURE_ARRAY_SIZE		(10)
-static  int16_t weightedTemperature = MIN_TEMPERATURE;
+static  int16_t weightedTemperature;
 
 int16_t getTemperature() {
 	return weightedTemperature;
+}
+
+int16_t calculateWeightedAverage(int16_t array[], uint8_t size) {
+	int16_t weightedAverage = array[0];
+	for (uint8_t i = 1; i < size; i++) {
+		weightedAverage = ceil( weightedAverage*0.75 + array[i]*0.25 ); // round up
+	}
+	
+	return weightedAverage;
 }
 
 
@@ -55,7 +65,7 @@ void temperatureTask(void* pvParameter) {
 
 	 xLastWakeTime = xTaskGetTickCount();
 	 
-	 int temperatureArray[TEMPERATURE_ARRAY_SIZE];
+	 int16_t temperatureArray[TEMPERATURE_ARRAY_SIZE];
 	 
 	 uint8_t counter = 0; 
 	 for (;;)
@@ -79,7 +89,7 @@ void temperatureTask(void* pvParameter) {
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(10) );
 		 
 		 int16_t temperature = hih8120_getTemperature_x10();
-		 if (temperature < MIN_TEMPERATURE*10 || temperature > MAX_TEMPERATUE*10)
+		 if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATUE)
 		 {
 			 // if temperature exceeds realistic values
 			 continue;
@@ -100,13 +110,9 @@ void temperatureTask(void* pvParameter) {
 		 // temp not ready
 		 
 		 // calculation of weighted average temperature 
-		 weightedTemperature = temperatureArray[0];
-		 for (uint8_t i = 1; i < TEMPERATURE_ARRAY_SIZE; i++) {
-			 weightedTemperature = weightedTemperature*0.75 + temperatureArray[i]*0.25;
-		 }
-		 
+		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMPERATURE_ARRAY_SIZE);
 		 printf("Weighted average temperature: %d\n", weightedTemperature);
-		 // ready to be taken
+		 // temp ready to be taken
 		
 	 }
 }
