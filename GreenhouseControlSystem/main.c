@@ -20,6 +20,8 @@
 #include <lora_driver.h>
 #include <status_leds.h>
 
+#include "temp_hum.h"
+
 // define two Tasks
 void task1( void *pvParameters );
 void task2( void *pvParameters );
@@ -105,7 +107,8 @@ void initialiseSystem()
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
 	stdio_initialise(ser_USART0);
 	// Let's create some tasks
-	create_tasks_and_semaphores();
+	// create_tasks_and_semaphores();
+	createTemperatureHumidityTask();
 
 	// vvvvvvvvvvvvvvvvv BELOW IS LoRaWAN initialisation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 	// Status Leds driver
@@ -120,7 +123,7 @@ void initialiseSystem()
 int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!!
-	printf("Program Started!!\n");
+	puts("Program Started!!\n");
 	vTaskStartScheduler(); // Initialise and run the freeRTOS scheduler. Execution should never return from here.
 
 	/* Replace with your application code */
