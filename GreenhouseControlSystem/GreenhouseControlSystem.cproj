@@ -201,6 +201,12 @@
     <Compile Include="temperature.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="upLinkHandler_LoraWAN.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="upLinkHandler_LoraWAN.h">
+      <SubType>compile</SubType>
+    </Compile>
     <None Include="FreeRTOS\Example\main.c.example">
       <SubType>compile</SubType>
     </None>
@@ -355,7 +361,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="LorawanConfig.h">
+    <Compile Include="lorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="LoRaWANHandler.c">
