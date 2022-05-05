@@ -20,7 +20,7 @@
 
 
 #define TEMP_HUM_DELAY_MS			(200)
-#define RETRIES_LEFT				(5)
+#define MAX_RETRIES					(5)
 
 // move to .h
 #define TEMP_HUM_TASK_STACK			( configMINIMAL_STACK_SIZE )
@@ -57,7 +57,7 @@ int16_t calculateWeightedAverage(int16_t array[], uint8_t size) {
 void initTempDriver() {
 	hih8120_driverReturnCode_t returnCode = hih8120_initialise();
 	
-	for (int i = 0; i < RETRIES_LEFT; i++) {
+	for (int i = 0; i < MAX_RETRIES; i++) {
 		if (returnCode != HIH8120_OK) {
 			puts("Temperature/humidity driver failed to initialize.\n");
 			return;
@@ -103,10 +103,14 @@ void temperatureHumidityTask(void* pvParameter) {
 		 int16_t temperature = hih8120_getTemperature_x10();
 		 uint16_t humidity = hih8120_getHumidityPercent_x10();
 		 
-		 if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATUE || humidity > MAX_HUMIDITY)
+		 if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATUE)
 		 {
-			 // if temperature or humidity exceeds realistic values
+			 // if temperature exceeds realistic values
 			 continue;
+		 }
+		 
+		 if (humidity > MAX_HUMIDITY) {
+			 continue; // humidity exceeds the norm
 		 }
 			
 		 
