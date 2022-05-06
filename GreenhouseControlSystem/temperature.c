@@ -5,6 +5,7 @@
  *  Author: ionc
  */ 
 #include "temperature.h"
+#include "application.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -18,7 +19,6 @@
 
 #include <stdio_driver.h>
 
-
 #define TEMP_DELAY_MS				(200)
 
 // move to .h
@@ -29,7 +29,8 @@
 #define MAX_TEMPERATUE				(40 * 10)
 
 #define TEMPERATURE_ARRAY_SIZE		(10)
-static  int16_t weightedTemperature;
+static int16_t weightedTemperature;
+
 
 int16_t getTemperature() {
 	return weightedTemperature;
@@ -68,11 +69,19 @@ void temperatureTask(void* pvParameter) {
 	 int16_t temperatureArray[TEMPERATURE_ARRAY_SIZE];
 	 
 	 uint8_t counter = 0; 
+	 
+	 
+	 //wait for 
 	 for (;;)
 	 { 
+		  xEventGroupWaitBits(_measureEventGroup,
+		  BIT_TASK_TEMPHUM,
+		  pdFALSE,
+		  pdTRUE,
+		  portMAX_DELAY
+		  );
+		 
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(50) );
-		 
-		 
 		 hih8120_driverReturnCode_t returnCode;
 		 if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
 			 printf("Temperature Driver failed to wake up, %d\n", returnCode);
@@ -104,21 +113,26 @@ void temperatureTask(void* pvParameter) {
 			xTaskDelayUntil( &xLastWakeTime, xFrequency );
 			continue;
 		 }
-		 
+		  
 		 counter = 0;
 		 
 		 // temp not ready
+		 
+		 
 		 
 		 // calculation of weighted average temperature 
 		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMPERATURE_ARRAY_SIZE);
 		 printf("Weighted average temperature: %d\n", weightedTemperature);
 		 // temp ready to be taken
+		 xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
+		 xTaskDelayUntil( &xLastWakeTime, xFrequency);
 		
 	 }
 }
 
 
 void createTemperatureTask(void) {
+	
 	
 	initTempDriver();
 	

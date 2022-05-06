@@ -21,6 +21,7 @@
 #include <status_leds.h>
 
 #include "upLinkHandler_LoraWAN.h"
+#include "application.h"
 #include "temperature.h"
 
 
@@ -45,6 +46,10 @@ void initialiseSystem()
 
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
 	stdio_initialise(ser_USART0);
+	// Let's create some tasks
+	// create_tasks_and_semaphores();
+	createApplicationTask();
+	createTemperatureTask();
 
 	// Create Tasks
 	createTemperatureTask();
