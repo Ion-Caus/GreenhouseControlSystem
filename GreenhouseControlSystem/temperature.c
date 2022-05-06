@@ -72,19 +72,16 @@ void temperatureTask(void* pvParameter) {
 	 
 	 
 	 //wait for 
-	 
 	 for (;;)
 	 { 
 		  xEventGroupWaitBits(_measureEventGroup,
 		  BIT_TASK_TEMPHUM,
-		  pdTRUE,
 		  pdFALSE,
+		  pdTRUE,
 		  portMAX_DELAY
 		  );
 		 
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(50) );
-		 
-		 
 		 hih8120_driverReturnCode_t returnCode;
 		 if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
 			 printf("Temperature Driver failed to wake up, %d\n", returnCode);
@@ -135,6 +132,7 @@ void temperatureTask(void* pvParameter) {
 
 
 void createTemperatureTask(void) {
+	
 	
 	initTempDriver();
 	

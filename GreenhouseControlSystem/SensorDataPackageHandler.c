@@ -25,5 +25,6 @@ lora_driver_payload_t getLoRaPayload(uint8_t port_no){
 	uplink_payload.bytes[0] = temperature >> 8;
 	uplink_payload.bytes[1] = temperature & 0xFF;
 	
+	
 	return uplink_payload;
 }

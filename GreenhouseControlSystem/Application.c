@@ -38,44 +38,45 @@ void applicationTask(void* pvParameter){
 	 xLastWakeTime = xTaskGetTickCount();
 	 
 	
-	xEventGroupSetBits(_measureEventGroup, BIT_TASK_TEMPHUM); //Tells the Temperature & Humidity sensor to wake up and collect data
-	//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); //Tells the CO2 sensor to wake up and collect data
+	for( ;; ){
+		xEventGroupSetBits(_measureEventGroup, BIT_TASK_TEMPHUM); //Tells the Temperature & Humidity sensor to wake up and collect data
+		//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); //Tells the CO2 sensor to wake up and collect data
 	
-	
-	int bits = BIT_TASK_TEMPHUM;
-	//| BIT_TASK_CO2;
-	
-	xEventGroupWaitBits(_readingsReadyEventGroup, 
-						bits,
-						pdTRUE,
-						pdTRUE,
-						portMAX_DELAY
-						); //wait for the tasks to return with their measurements and set their event group flags 
-						
-						
-	//once the task is ready 
-	
-	//pause that task
-	
-	xEventGroupClearBits(_measureEventGroup, bits);
-	
-	int measuredTemperature = getTemperature();
 		
-	setTemperature(measuredTemperature);
+		int bits = BIT_TASK_TEMPHUM;
+		//| BIT_TASK_CO2;
 	
+		puts("waiting for measurements");
+		xEventGroupWaitBits(_readingsReadyEventGroup, 
+							bits,
+							pdTRUE,
+							pdTRUE,
+							portMAX_DELAY
+							); //wait for the tasks to return with their measurements and set their event group flags 
+						
+						
+		//once the task is ready 
+		//pause that task
+		xEventGroupClearBits(_measureEventGroup, bits);
 	
+		//getting the calculated temperature from the sensor
+		int measuredTemperature = getTemperature();
+		
+		//providing data for the Lora payload
+		setTemperature(measuredTemperature);
 	
-	lora_driver_payload_t payload = getLoRaPayload(LORA_PORTNO);
+		//getting Lora payload package
+		//lora_driver_payload_t payload = getLoRaPayload(LORA_PORTNO);
 	
-	printf("%d %d \n", payload.bytes[0], payload.bytes[1]);
-	
-	xTaskDelayUntil( &xLastWakeTime, xFrequency);
+		xTaskDelayUntil( &xLastWakeTime, xFrequency);	
+	}
 	
 
 }
 
 void createApplicationTask(void){
 	
+	puts("created the application task!");
 	initEventGroups();
 	
 	xTaskCreate(
