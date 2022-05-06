@@ -17,22 +17,11 @@
 
 #include <stdio_driver.h>
 #include "event_groups.h"
+#include "application.h"
 #include "temperature.h"
 #include "sensorDataPackageHandler.h"
 
-
-
-// move to .h
-#define APPLICATION_TASK_STACK		( configMINIMAL_STACK_SIZE )
-#define APPLICATION_TASK_PRIORITY	( tskIDLE_PRIORITY + 2 ) //Make this higher than other tasks
-
-EventGroupHandle_t _measureEventGroup = NULL;
-EventGroupHandle_t _readingsReadyEventGroup = NULL;
-
-#define BIT_TASK_TEMPERATURE (1<<0)
-#define BIT_TASK_CO2 (1<<1)
-
-
+#define TEMP_DELAY_MS				(1000 * 3)
 
 void initEventGroups(void){
 	_measureEventGroup = xEventGroupCreate();
@@ -43,10 +32,46 @@ void initEventGroups(void){
 void applicationTask(void* pvParameter){
 	(void)pvParameter; //discarding parameters;
 	
+	 TickType_t xLastWakeTime;
+	 const TickType_t xFrequency = TEMP_DELAY_MS/portTICK_PERIOD_MS;
+
+	 xLastWakeTime = xTaskGetTickCount();
+	 
+	
+	xEventGroupSetBits(_measureEventGroup, BIT_TASK_TEMPHUM); //Tells the Temperature & Humidity sensor to wake up and collect data
+	//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); //Tells the CO2 sensor to wake up and collect data
+	
+	
+	int bits = BIT_TASK_TEMPHUM;
+	//| BIT_TASK_CO2;
+	
+	xEventGroupWaitBits(_readingsReadyEventGroup, 
+						bits,
+						pdTRUE,
+						pdTRUE,
+						portMAX_DELAY
+						); //wait for the tasks to return with their measurements and set their event group flags 
+						
+						
 	//once the task is ready 
+	
+	//pause that task
+	
+	xEventGroupClearBits(_measureEventGroup, bits);
+	
 	int measuredTemperature = getTemperature();
+		
+	setTemperature(measuredTemperature);
 	
 	
+	
+	lora_driver_payload_t payload = getLoRaPayload(LORA_PORTNO);
+	
+	printf("%d %d \n", payload.bytes[0], payload.bytes[1]);
+	
+	xTaskDelayUntil( &xLastWakeTime, xFrequency);
+	
+
 }
 
 void createApplicationTask(void){

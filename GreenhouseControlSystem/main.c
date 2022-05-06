@@ -20,6 +20,7 @@
 #include <lora_driver.h>
 #include <status_leds.h>
 
+#include "application.h"
 #include "temperature.h"
 
 // define two Tasks
@@ -108,6 +109,7 @@ void initialiseSystem()
 	stdio_initialise(ser_USART0);
 	// Let's create some tasks
 	// create_tasks_and_semaphores();
+	createApplicationTask();
 	createTemperatureTask();
 
 	// vvvvvvvvvvvvvvvvv BELOW IS LoRaWAN initialisation vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv

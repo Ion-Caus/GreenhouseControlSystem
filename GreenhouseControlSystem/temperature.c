@@ -5,6 +5,7 @@
  *  Author: ionc
  */ 
 #include "temperature.h"
+#include "application.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -18,7 +19,6 @@
 
 #include <stdio_driver.h>
 
-
 #define TEMP_DELAY_MS				(200)
 
 // move to .h
@@ -30,6 +30,7 @@
 
 #define TEMPERATURE_ARRAY_SIZE		(10)
 static int16_t weightedTemperature;
+
 
 int16_t getTemperature() {
 	return weightedTemperature;
@@ -68,8 +69,19 @@ void temperatureTask(void* pvParameter) {
 	 int16_t temperatureArray[TEMPERATURE_ARRAY_SIZE];
 	 
 	 uint8_t counter = 0; 
+	 
+	 
+	 //wait for 
+	 
 	 for (;;)
 	 { 
+		  xEventGroupWaitBits(_measureEventGroup,
+		  BIT_TASK_TEMPHUM,
+		  pdTRUE,
+		  pdFALSE,
+		  portMAX_DELAY
+		  );
+		 
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(50) );
 		 
 		 
@@ -104,15 +116,19 @@ void temperatureTask(void* pvParameter) {
 			xTaskDelayUntil( &xLastWakeTime, xFrequency );
 			continue;
 		 }
-		 
+		  
 		 counter = 0;
 		 
 		 // temp not ready
+		 
+		 
 		 
 		 // calculation of weighted average temperature 
 		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMPERATURE_ARRAY_SIZE);
 		 printf("Weighted average temperature: %d\n", weightedTemperature);
 		 // temp ready to be taken
+		 xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
+		 xTaskDelayUntil( &xLastWakeTime, xFrequency);
 		
 	 }
 }
