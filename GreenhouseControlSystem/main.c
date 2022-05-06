@@ -24,8 +24,7 @@
 #include "application.h"
 #include "temperature.h"
 
-
-#define BUFFER_LENGHT		( UPLINK_PAYLOAD_LENGHT + 2 )
+#include "payloadConfig.h"
 
 
 MessageBufferHandle_t upLinkBuffer;
@@ -34,8 +33,8 @@ MessageBufferHandle_t downLinkBuffer;
 
 /*-----------------------------------------------------------*/
 void initBuffers() {
-	upLinkBuffer =  xMessageBufferCreate(BUFFER_LENGHT);
-	downLinkBuffer = xMessageBufferCreate(BUFFER_LENGHT);
+	upLinkBuffer =  xMessageBufferCreate(UPLINK_PAYLOAD_LENGHT);
+	downLinkBuffer = xMessageBufferCreate(UPLINK_PAYLOAD_LENGHT);
 }
 
 /*-----------------------------------------------------------*/

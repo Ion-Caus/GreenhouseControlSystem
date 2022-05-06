@@ -21,7 +21,14 @@
 #include "temperature.h"
 #include "sensorDataPackageHandler.h"
 
+#include "payloadConfig.h"
+
 #define TEMP_DELAY_MS				(1000 * 3)
+
+EventGroupHandle_t _measureEventGroup;
+EventGroupHandle_t _readingsReadyEventGroup;
+
+extern MessageBufferHandle_t upLinkBuffer; 
 
 void initEventGroups(void){
 	_measureEventGroup = xEventGroupCreate();
@@ -66,7 +73,13 @@ void applicationTask(void* pvParameter){
 		setTemperature(measuredTemperature);
 	
 		//getting Lora payload package
-		//lora_driver_payload_t payload = getLoRaPayload(LORA_PORTNO);
+		lora_driver_payload_t payload = getLoRaPayload(UPLINK_PAYLOAD_PORTNO);
+		
+		//sending the payload to uplink buffer
+		xMessageBufferSend(upLinkBuffer,
+		(void*)&payload,  
+		UPLINK_PAYLOAD_LENGHT,	
+		portMAX_DELAY);
 	
 		xTaskDelayUntil( &xLastWakeTime, xFrequency);	
 	}

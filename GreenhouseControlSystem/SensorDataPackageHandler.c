@@ -9,9 +9,11 @@
 #include "lora_driver.h"
 #include "sensorDataPackageHandler.h"
 
-#define PACKAGE_LENGTH			(20)
 
-int16_t temperature;
+#include "payloadConfig.h"
+
+
+static int16_t temperature;
 
 void setTemperature(int16_t temp){
 	temperature = temp;
@@ -19,7 +21,8 @@ void setTemperature(int16_t temp){
 
 lora_driver_payload_t getLoRaPayload(uint8_t port_no){
 	lora_driver_payload_t uplink_payload;
-	uplink_payload.len = PACKAGE_LENGTH; //TODO Figure out a way to define the payload length properly
+	
+	uplink_payload.len = UPLINK_PAYLOAD_LENGHT;
 	uplink_payload.portNo = port_no;
 	
 	uplink_payload.bytes[0] = temperature >> 8;

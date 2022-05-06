@@ -31,6 +31,8 @@
 #define TEMPERATURE_ARRAY_SIZE		(10)
 static int16_t weightedTemperature;
 
+extern EventGroupHandle_t _measureEventGroup;
+extern EventGroupHandle_t _readingsReadyEventGroup;
 
 int16_t getTemperature() {
 	return weightedTemperature;

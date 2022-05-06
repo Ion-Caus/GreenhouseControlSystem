@@ -14,12 +14,11 @@
 
 #define APPLICATION_TASK_STACK		( configMINIMAL_STACK_SIZE )
 #define APPLICATION_TASK_PRIORITY	( tskIDLE_PRIORITY + 2 ) //Make this higher than other tasks
+
 #define BIT_TASK_TEMPHUM (1<<0)
 #define BIT_TASK_CO2 (1<<1)
-#define LORA_PORTNO  (3)
 
-EventGroupHandle_t _measureEventGroup;
-EventGroupHandle_t _readingsReadyEventGroup;
+#define LORA_PORTNO  (3)
 
 void createApplicationTask(void);
 

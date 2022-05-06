@@ -16,8 +16,7 @@
 #include "lorawanConfig.h"
 #include "upLinkHandler_LoraWAN.h"
 
-
-#define UPLINK_PAYLOAD_PORTNO		(2)
+#include "payloadConfig.h"
 
 extern MessageBufferHandle_t upLinkBuffer;
 
@@ -128,7 +127,7 @@ void upLinkHandler_task( void *pvParameters )
 	xLastWakeTime = xTaskGetTickCount();
 	
 	
-	int8_t payloadBuffer[UPLINK_PAYLOAD_LENGHT] = {0};
+	uint8_t payloadBuffer[UPLINK_PAYLOAD_LENGHT] = {0};
 	
 	for(;;)
 	{
@@ -142,6 +141,11 @@ void upLinkHandler_task( void *pvParameters )
 		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
 			_uplink_payload.bytes[i] = payloadBuffer[i]; 
 		}
+		
+		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
+			printf("%d, ", _uplink_payload.bytes[i]);
+		}
+		printf("\n");
 		
 		//_uplink_payload.bytes[0] = ;
 		//_uplink_payload.bytes[1] = hum & 0xFF;
