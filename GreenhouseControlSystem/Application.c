@@ -53,7 +53,6 @@ void applicationTask(void* pvParameter){
 		int bits = BIT_TASK_TEMPHUM;
 		//| BIT_TASK_CO2;
 	
-		puts("waiting for measurements");
 		xEventGroupWaitBits(_readingsReadyEventGroup, 
 							bits,
 							pdTRUE,
