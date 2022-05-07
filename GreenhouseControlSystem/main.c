@@ -34,7 +34,7 @@ MessageBufferHandle_t downLinkBuffer;
 /*-----------------------------------------------------------*/
 void initBuffers() {
 	upLinkBuffer =  xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
-	downLinkBuffer = xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT *2 );
+	downLinkBuffer = xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
 }
 
 /*-----------------------------------------------------------*/
@@ -49,8 +49,7 @@ void initialiseSystem()
 	// Initialize buffers for upLink and downLink Lora handler
 	initBuffers();
 	
-	// Let's create some tasks
-	// create_tasks
+	// Creates tasks
 	createApplicationTask();
 	createTemperatureTask();
 	

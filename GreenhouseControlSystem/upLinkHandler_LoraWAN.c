@@ -18,14 +18,15 @@
 
 #include "payloadConfig.h"
 
+#define UPLINKHANDLER_LORA_TASK_DELAY_MS				(300000) // Upload message every 5 minutes (300000 ms)
+
+
 extern MessageBufferHandle_t upLinkBuffer;
-
-// define task
-void upLinkHandler_lora_task( void *pvParameters );
-
 
 static lora_driver_payload_t _uplink_payload;
 
+
+void upLinkHandler_lora_task( void *pvParameters );
 
 static void _lora_setup(void)
 {
@@ -104,8 +105,11 @@ static void _lora_setup(void)
 void initLoraWAN(void) {
 	// Hardware reset of LoRaWAN transceiver
 	lora_driver_resetRn2483(1);
+	
 	vTaskDelay(2);
+	
 	lora_driver_resetRn2483(0);
+	
 	// Give it a chance to wakeup
 	vTaskDelay(150);
 
@@ -125,45 +129,40 @@ void upLinkHandler_task( void *pvParameters )
 	initLoraWAN();
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = pdMS_TO_TICKS(30000UL); // Upload message every 5 minutes (300000 ms)
+	
+	const TickType_t xFrequency = pdMS_TO_TICKS(UPLINKHANDLER_LORA_TASK_DELAY_MS); 
 	xLastWakeTime = xTaskGetTickCount();
 	
 	
-	uint8_t payloadBuffer[Pa] = {0};
+	uint8_t payloadBuffer[UPLINK_PAYLOAD_LENGHT] = {0};
 	
 	for(;;)
 	{
 		xTaskDelayUntil( &xLastWakeTime, xFrequency );
+		
+		// receiving the payload from the upLink buffer
+		xMessageBufferReceive(upLinkBuffer,
+			(void*)payloadBuffer,
+			UPLINK_PAYLOAD_LENGHT,
+			portMAX_DELAY);
+		
+		printf("Received message from UpLinkBuffer\n");
 		
 		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
 			printf("%d, ", payloadBuffer[i]);
 		}
 		printf("\n");
 		
-		xMessageBufferReceive(upLinkBuffer,
-		(void*)payloadBuffer,
-		UPLINK_PAYLOAD_LENGHT,
-		portMAX_DELAY);
-		
-		printf("Received message from UpLinkBuffer\n");
 
 		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
 			_uplink_payload.bytes[i] = payloadBuffer[i]; 
 		}
 		
-		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
-			printf("%d, ", _uplink_payload.bytes[i]);
-		}
-		printf("\n");
 		
-		//_uplink_payload.bytes[0] = ;
-		//_uplink_payload.bytes[1] = hum & 0xFF;
-		//_uplink_payload.bytes[2] = temp >> 8;
-		//_uplink_payload.bytes[3] = temp & 0xFF;
-		//_uplink_payload.bytes[4] = co2_ppm >> 8;
-		//_uplink_payload.bytes[5] = co2_ppm & 0xFF;
 
 		status_leds_shortPuls(led_ST4);  // OPTIONAL
+		
+		// sending the upLink payload to Lora
 		lora_driver_returnCode_t uploadStatus = lora_driver_sendUploadMessage(false, &_uplink_payload);
 		
 		printf("Upload Message >%s<\n", 
