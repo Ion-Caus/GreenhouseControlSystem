@@ -125,11 +125,11 @@ void upLinkHandler_task( void *pvParameters )
 	initLoraWAN();
 	
 	TickType_t xLastWakeTime;
-	const TickType_t xFrequency = pdMS_TO_TICKS(300000UL); // Upload message every 5 minutes (300000 ms)
+	const TickType_t xFrequency = pdMS_TO_TICKS(30000UL); // Upload message every 5 minutes (300000 ms)
 	xLastWakeTime = xTaskGetTickCount();
 	
 	
-	uint8_t payloadBuffer[sizeof(lora_driver_payload_t)] = {0};
+	uint8_t payloadBuffer[Pa] = {0};
 	
 	for(;;)
 	{
@@ -142,7 +142,7 @@ void upLinkHandler_task( void *pvParameters )
 		
 		xMessageBufferReceive(upLinkBuffer,
 		(void*)payloadBuffer,
-		sizeof(payloadBuffer),
+		UPLINK_PAYLOAD_LENGHT,
 		portMAX_DELAY);
 		
 		printf("Received message from UpLinkBuffer\n");

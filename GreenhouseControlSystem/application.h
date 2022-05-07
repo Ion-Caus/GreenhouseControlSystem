@@ -18,7 +18,5 @@
 #define BIT_TASK_TEMPHUM (1<<0)
 #define BIT_TASK_CO2 (1<<1)
 
-#define LORA_PORTNO  (3)
-
 void createApplicationTask(void);
 

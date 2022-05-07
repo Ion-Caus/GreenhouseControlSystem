@@ -10,7 +10,7 @@
 #define PAYLOADCONFIG_H_
 
 #define UPLINK_PAYLOAD_LENGHT		(6)
-#define UPLINK_PAYLOAD_PORTNO		(2)
+#define UPLINK_PAYLOAD_PORTNO		(3)
 
 
 #endif /* PAYLOADCONFIG_H_*/

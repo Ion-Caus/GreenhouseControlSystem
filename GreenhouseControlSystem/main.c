@@ -33,8 +33,8 @@ MessageBufferHandle_t downLinkBuffer;
 
 /*-----------------------------------------------------------*/
 void initBuffers() {
-	upLinkBuffer =  xMessageBufferCreate(UPLINK_PAYLOAD_LENGHT);
-	downLinkBuffer = xMessageBufferCreate(UPLINK_PAYLOAD_LENGHT);
+	upLinkBuffer =  xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
+	downLinkBuffer = xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT *2 );
 }
 
 /*-----------------------------------------------------------*/
@@ -46,13 +46,14 @@ void initialiseSystem()
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
 	stdio_initialise(ser_USART0);
 	
+	// Initialize buffers for upLink and downLink Lora handler
+	initBuffers();
+	
 	// Let's create some tasks
 	// create_tasks
 	createApplicationTask();
 	createTemperatureTask();
 	
-	// Initialize buffers for upLink and downLink Lora handler
-	initBuffers(); 
 
 	// ===== BELOW IS LoRaWAN initialisation =====
 	// Status LEDs driver

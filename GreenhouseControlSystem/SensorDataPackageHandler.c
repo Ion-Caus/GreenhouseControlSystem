@@ -7,17 +7,17 @@
 
 #include <stdint.h>
 #include "sensorDataPackageHandler.h"
+#include "payloadConfig.h"
 
 
 static int16_t temperature;
+static uint8_t array_payload[UPLINK_PAYLOAD_LENGHT] = {0};
 
 void setTemperature(int16_t temp){
 	temperature = temp;
 }
 
 uint8_t* getArrPayload(){
-	uint8_t array_payload[6];
-	
 	array_payload[0] = temperature >> 8;
 	array_payload[1] = temperature & 0xFF;
 	
