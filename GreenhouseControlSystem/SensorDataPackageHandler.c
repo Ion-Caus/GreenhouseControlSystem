@@ -6,11 +6,7 @@
  */ 
 
 #include <stdint.h>
-#include "lora_driver.h"
 #include "sensorDataPackageHandler.h"
-
-
-#include "payloadConfig.h"
 
 
 static int16_t temperature;
@@ -19,15 +15,12 @@ void setTemperature(int16_t temp){
 	temperature = temp;
 }
 
-lora_driver_payload_t getLoRaPayload(uint8_t port_no){
-	lora_driver_payload_t uplink_payload;
+uint8_t* getArrPayload(){
+	uint8_t array_payload[6];
 	
-	uplink_payload.len = UPLINK_PAYLOAD_LENGHT;
-	uplink_payload.portNo = port_no;
-	
-	uplink_payload.bytes[0] = temperature >> 8;
-	uplink_payload.bytes[1] = temperature & 0xFF;
+	array_payload[0] = temperature >> 8;
+	array_payload[1] = temperature & 0xFF;
 	
 	
-	return uplink_payload;
+	return array_payload;
 }

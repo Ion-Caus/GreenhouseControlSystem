@@ -23,7 +23,7 @@
 
 #include "payloadConfig.h"
 
-#define TEMP_DELAY_MS				(1000 * 3)
+#define TEMP_DELAY_MS				(31000)
 
 EventGroupHandle_t _measureEventGroup;
 EventGroupHandle_t _readingsReadyEventGroup;
@@ -40,7 +40,7 @@ void applicationTask(void* pvParameter){
 	(void)pvParameter; //discarding parameters;
 	
 	 TickType_t xLastWakeTime;
-	 const TickType_t xFrequency = TEMP_DELAY_MS/portTICK_PERIOD_MS;
+	 const TickType_t xFrequency = pdMS_TO_TICKS(TEMP_DELAY_MS);
 
 	 xLastWakeTime = xTaskGetTickCount();
 	 
@@ -71,14 +71,19 @@ void applicationTask(void* pvParameter){
 		//providing data for the Lora payload
 		setTemperature(measuredTemperature);
 	
+		printf("Got the payload\n");
 		//getting Lora payload package
-		lora_driver_payload_t payload = getLoRaPayload(UPLINK_PAYLOAD_PORTNO);
+		uint8_t* payload = getArrPayload();
 		
+		size_t sentBytes;
 		//sending the payload to uplink buffer
-		xMessageBufferSend(upLinkBuffer,
-		(void*)&payload,  
-		UPLINK_PAYLOAD_LENGHT,	
+		sentBytes = xMessageBufferSend(upLinkBuffer,
+		(void*)payload,  
+		sizeof(lora_driver_payload_t),	
 		portMAX_DELAY);
+		
+		
+		printf("Sent message to uplink buffer, sent bytes =%d\n", sentBytes);
 	
 		xTaskDelayUntil( &xLastWakeTime, xFrequency);	
 	}
