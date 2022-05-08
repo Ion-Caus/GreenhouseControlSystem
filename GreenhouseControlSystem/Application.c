@@ -77,6 +77,11 @@ void applicationTask(void* pvParameter){
 		uint8_t* payload = getArrPayload();
 		puts("Application task got the payload\n");
 		
+		if (!xMessageBufferIsEmpty(upLinkBuffer)) {
+			// reset the buffer to override the payload
+			xMessageBufferReset(upLinkBuffer);
+		}
+	
 		//sending the payload to upLink buffer
 		size_t sentBytes = xMessageBufferSend(upLinkBuffer,
 			(void*)payload,
