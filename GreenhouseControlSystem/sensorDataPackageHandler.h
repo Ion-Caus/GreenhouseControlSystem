@@ -13,4 +13,4 @@
 
 void setTemperature(int16_t temp);
 
-lora_driver_payload_t getLoRaPayload(uint8_t port_no);
+uint8_t* getArrPayload();

@@ -21,7 +21,14 @@
 #include "temperature.h"
 #include "sensorDataPackageHandler.h"
 
-#define TEMP_DELAY_MS				(1000 * 3)
+#include "payloadConfig.h"
+
+#define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
+
+EventGroupHandle_t _measureEventGroup;
+EventGroupHandle_t _readingsReadyEventGroup;
+
+extern MessageBufferHandle_t upLinkBuffer; 
 
 void initEventGroups(void){
 	_measureEventGroup = xEventGroupCreate();
@@ -32,41 +39,56 @@ void initEventGroups(void){
 void applicationTask(void* pvParameter){
 	(void)pvParameter; //discarding parameters;
 	
-	 TickType_t xLastWakeTime;
-	 const TickType_t xFrequency = TEMP_DELAY_MS/portTICK_PERIOD_MS;
+	puts("Application task started!\n");
+	
+	TickType_t xLastWakeTime;
+	const TickType_t xFrequency = pdMS_TO_TICKS(APPICATION_TASK_DELAY_MS);
 
-	 xLastWakeTime = xTaskGetTickCount();
+	xLastWakeTime = xTaskGetTickCount();
 	 
-	
-	for( ;; ){
-		xEventGroupSetBits(_measureEventGroup, BIT_TASK_TEMPHUM); //Tells the Temperature & Humidity sensor to wake up and collect data
-		//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); //Tells the CO2 sensor to wake up and collect data
-	
+	for(;;) {
+		//Tells the Temperature & Humidity sensor to wake up and collect data
+		xEventGroupSetBits(_measureEventGroup, BIT_TASK_TEMPHUM); 
 		
-		int bits = BIT_TASK_TEMPHUM;
-		//| BIT_TASK_CO2;
-	
-		puts("waiting for measurements");
+		//Tells the CO2 sensor to wake up and collect data
+		//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); 
+		
+		uint8_t bits = BIT_TASK_TEMPHUM; //| BIT_TASK_CO2;
+		
+		//wait for the tasks to return with their measurements and set their event group flags							
 		xEventGroupWaitBits(_readingsReadyEventGroup, 
 							bits,
 							pdTRUE,
 							pdTRUE,
 							portMAX_DELAY
-							); //wait for the tasks to return with their measurements and set their event group flags 
+							); 
 						
 						
-		//once the task is ready 
-		//pause that task
+		//once the measure task are ready pause them
 		xEventGroupClearBits(_measureEventGroup, bits);
 	
 		//getting the calculated temperature from the sensor
-		int measuredTemperature = getTemperature();
+		int16_t measuredTemperature = getTemperature();
 		
 		//providing data for the Lora payload
 		setTemperature(measuredTemperature);
 	
 		//getting Lora payload package
-		//lora_driver_payload_t payload = getLoRaPayload(LORA_PORTNO);
+		uint8_t* payload = getArrPayload();
+		puts("Application task got the payload\n");
+		
+		if (!xMessageBufferIsEmpty(upLinkBuffer)) {
+			// reset the buffer to override the payload
+			xMessageBufferReset(upLinkBuffer);
+		}
+	
+		//sending the payload to upLink buffer
+		size_t sentBytes = xMessageBufferSend(upLinkBuffer,
+			(void*)payload,
+			UPLINK_PAYLOAD_LENGHT,
+			portMAX_DELAY);
+		
+		printf("Sent payload to upLink buffer, sent bytes =%d\n", sentBytes);
 	
 		xTaskDelayUntil( &xLastWakeTime, xFrequency);	
 	}
@@ -75,8 +97,6 @@ void applicationTask(void* pvParameter){
 }
 
 void createApplicationTask(void){
-	
-	puts("created the application task!");
 	initEventGroups();
 	
 	xTaskCreate(
