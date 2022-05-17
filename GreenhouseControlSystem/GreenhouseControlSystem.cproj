@@ -153,6 +153,12 @@
     <Compile Include="application.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="downLinkHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="downLinkHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drivers\display_7seg.h">
       <SubType>compile</SubType>
     </Compile>
