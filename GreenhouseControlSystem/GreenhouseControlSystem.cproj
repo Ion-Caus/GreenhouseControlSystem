@@ -147,6 +147,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Application.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="application.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drivers\display_7seg.h">
       <SubType>compile</SubType>
     </Compile>
@@ -195,10 +201,25 @@
     <Compile Include="drivers\twi.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="payloadConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="SensorDataPackageHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sensorDataPackageHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="temp_hum.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="temp_hum.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="upLinkHandler_LoraWAN.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="upLinkHandler_LoraWAN.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="FreeRTOS\Example\main.c.example">

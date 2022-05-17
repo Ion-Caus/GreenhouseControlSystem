@@ -18,7 +18,7 @@
 #include <stdio_driver.h>
 #include "event_groups.h"
 #include "application.h"
-#include "temperature.h"
+#include "temp_hum.h"
 #include "sensorDataPackageHandler.h"
 
 #include "payloadConfig.h"
