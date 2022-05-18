@@ -153,6 +153,12 @@
     <Compile Include="application.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="co2.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="co2.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drivers\display_7seg.h">
       <SubType>compile</SubType>
     </Compile>
@@ -220,6 +226,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="upLinkHandler_LoraWAN.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="weighted_average.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="weighted_average.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="FreeRTOS\Example\main.c.example">

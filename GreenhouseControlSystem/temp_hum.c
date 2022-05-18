@@ -6,6 +6,7 @@
  */ 
 #include "temp_hum.h"
 #include "application.h"
+#include "weighted_average.h"
 
 #include <stdint.h>
 #include <stdio.h>
@@ -47,18 +48,8 @@ uint16_t getHumidity() {
 	return weightedHumidity;
 }
 
-int16_t calculateWeightedAverage(int16_t array[], uint8_t size) {
-	// calculation the weighted average for an array of measurements 
-	int16_t weightedAverage = array[0];
-	for (uint8_t i = 1; i < size; i++) {
-		weightedAverage = ceil( weightedAverage*0.75 + array[i]*0.25 ); // round up
-	}
-	
-	return weightedAverage;
-}
 
-
-void initTempDriver() {
+void initTempHumDriver() {
 	hih8120_driverReturnCode_t returnCode = hih8120_initialise();
 	
 	for (int i = 0; i < MAX_RETRIES; i++) {
@@ -163,11 +154,11 @@ void temperatureHumidityTask(void* pvParameter) {
 
 void createTemperatureHumidityTask(void) {
 		 
-	initTempDriver();
+	initTempHumDriver();
 	
 	xTaskCreate(
 		temperatureHumidityTask,		// function task name
-		"Temperature Task",				// task name
+		"Temperature/Humidity Task",	// task name
 		TEMP_HUM_TASK_STACK,
 		NULL,
 		TEMP_HUM_TASK_PRIORITY,

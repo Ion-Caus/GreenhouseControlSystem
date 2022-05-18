@@ -23,6 +23,7 @@
 #include "upLinkHandler_LoraWAN.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "co2.h"
 
 #include "payloadConfig.h"
 
@@ -51,8 +52,8 @@ void initialiseSystem()
 	
 	// Creates tasks
 	createApplicationTask();
+	createCo2Task();
 	createTemperatureHumidityTask();
-	
 	
 	// ===== BELOW IS LoRaWAN initialisation =====
 	// Status LEDs driver
