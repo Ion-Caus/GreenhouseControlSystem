@@ -37,11 +37,25 @@
     <IncludePath>C:\VIA\SEMESTER4\SEP4\Code\GreenhouseControlSystem\GreenhouseControlSystem;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="FreeRTOS_FFF_MocksDefinitions.cpp" />
     <ClCompile Include="temperatureTests.cpp" />
     <ClCompile Include="test.cpp" />
+    <ClCompile Include="../SystemUnderTest/temperature.c" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+
+    <ClInclude Include="event_groups.h" />
+    <ClInclude Include="fff.h" />
+    <ClInclude Include="FreeRTOS.h" />
+    <ClInclude Include="FreeRTOS_FFF_MocksDeclaration.h" />
+    <ClInclude Include="message_buffer.h" />
+    <ClInclude Include="queue.h" />
+    <ClInclude Include="semphr.h" />
+    <ClInclude Include="task.h" />
+    <ClInclude Include="timers.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
