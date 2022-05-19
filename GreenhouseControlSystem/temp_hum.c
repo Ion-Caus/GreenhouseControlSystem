@@ -39,7 +39,6 @@ static uint16_t weightedHumidity;
 extern EventGroupHandle_t _measureEventGroup;
 extern EventGroupHandle_t _readingsReadyEventGroup;
 
-
 int16_t getTemperature() {
 	return weightedTemperature;
 }
@@ -78,7 +77,7 @@ void temperatureHumidityTask(void* pvParameter) {
 	 uint8_t index = 0; 
 	 for (;;)
 	 { 
-		 // waiting for the application task to set the bit as ready
+		  // waiting for the application task to set the bit as ready
 		  xEventGroupWaitBits(_measureEventGroup,
 			  BIT_TASK_TEMPHUM,
 			  pdFALSE,
@@ -134,20 +133,20 @@ void temperatureHumidityTask(void* pvParameter) {
 		 // reset index 
 		 index = 0;
 		 
-		 		 
+		
 		 // calculation of weighted averages
-		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMP_HUM_ARRAY_SIZE);
-		 printf("Weighted average temperature: %d\n", weightedTemperature);
+		weightedTemperature = calculateWeightedAverage(temperatureArray, TEMP_HUM_ARRAY_SIZE);
+		printf("Weighted average temperature: %d\n", weightedTemperature);
+			 
+		weightedHumidity = calculateWeightedAverage(humidityArray, TEMP_HUM_ARRAY_SIZE);
+		printf("Weighted average humidity: %d\n", weightedHumidity);
+			
 		 
-		 weightedHumidity = calculateWeightedAverage(humidityArray, TEMP_HUM_ARRAY_SIZE);
-		 printf("Weighted average humidity: %d\n", weightedHumidity);
-		 
-		 
-		  // announce application task that the data is ready to be taken
-		  xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
+		// announce application task that the data is ready to be taken
+		xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
 		  
 		  
-		  xTaskDelayUntil( &xLastWakeTime, xFrequency);
+		xTaskDelayUntil( &xLastWakeTime, xFrequency);
 	 }
 }
 

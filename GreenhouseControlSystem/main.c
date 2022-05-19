@@ -24,6 +24,7 @@
 #include "application.h"
 #include "temp_hum.h"
 #include "co2.h"
+#include "weighted_average.h"
 
 #include "payloadConfig.h"
 
@@ -71,6 +72,12 @@ int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!! 
 	
+	 // mutex for accessing weighted average calculation by different tasks
+	avg_calc_mutex = xSemaphoreCreateMutex();
+	if((avg_calc_mutex)!=NULL){
+		xSemaphoreGive((avg_calc_mutex));
+	}		
+
 	puts("Program Started!!\n");
 	vTaskStartScheduler(); // Initialize and run the freeRTOS scheduler. Execution should never return from here.
 

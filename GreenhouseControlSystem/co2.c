@@ -10,6 +10,9 @@
 #include "weighted_average.h"
 
 #include <ATMEGA_FreeRTOS.h>
+#include <task.h>
+#include <semphr.h>
+
 #include <mh_z19.h>
 #include <stdio_driver.h>
 
@@ -22,7 +25,13 @@
 #define CO2_TASK_STACK			( configMINIMAL_STACK_SIZE )
 #define CO2_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
 
+#define MAX_CO2					( 5000 ) // max ppm
+
 #define CO2_ARRAY_SIZE			( 10 )
+
+extern EventGroupHandle_t _measureEventGroup;
+extern EventGroupHandle_t _readingsReadyEventGroup;
+
 
 static uint16_t weightedCo2;
 
@@ -54,6 +63,13 @@ void co2Task(void* pvParameter) {
 	
 	for (;;) {
 		
+			xEventGroupWaitBits(_measureEventGroup,
+			BIT_TASK_CO2,
+			pdFALSE, //clear the bit so measurement will happen just after someone request it again
+			pdTRUE,
+			portMAX_DELAY
+			);
+		
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 
 		mh_z19_returnCode_t returnCode;
@@ -67,6 +83,11 @@ void co2Task(void* pvParameter) {
 		if((returnCode = mh_z19_getCo2Ppm(&co2)) != MHZ19_OK) {
 			printf("Failed to retrieve the measurement of Co2: %d\n", returnCode);
 			continue;
+		}
+		
+		
+		if (co2 > MAX_CO2) {
+			continue; // if co2 exceeds the norm
 		}
 		
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(10));
@@ -84,12 +105,16 @@ void co2Task(void* pvParameter) {
 		 // reset index
 		 index = 0;
 		 
+		
+		// calculation of weighted average
+		weightedCo2 = calculateWeightedAverage(co2Array, CO2_ARRAY_SIZE);
+		printf("Weighted average co2: %d\n", weightedCo2);
+			 
 		 
-		 // calculation of weighted average
-		 weightedCo2 = calculateWeightedAverage(co2Array, CO2_ARRAY_SIZE);
-		 printf("Weighted average co2: %d\n", weightedCo2);
+		 // data ready to take
+		xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_CO2);
 
-		 xTaskDelayUntil(&xLastWakeTime, xFrequency);
+		xTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
