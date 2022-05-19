@@ -156,5 +156,5 @@ void createTemperatureTask(void) {
 }
 
 void tempeperature_destory() {
-	hih8120_destroy();
+	//hih8120_destroy();
 }
