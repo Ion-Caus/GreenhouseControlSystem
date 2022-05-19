@@ -70,8 +70,12 @@ void applicationTask(void* pvParameter){
 		//getting the calculated temperature from the sensor
 		int16_t measuredTemperature = getTemperature();
 		
+		//getting the calculated temperature from the sensor
+		uint16_t measuredHumidity = getHumidity();
+		
 		//providing data for the Lora payload
 		setTemperature(measuredTemperature);
+		setHumidity(measuredHumidity);
 	
 		//getting Lora payload package
 		uint8_t* payload = getArrPayload();
