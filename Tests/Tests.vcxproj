@@ -34,14 +34,21 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>C:\VIA\SEMESTER4\SEP4\Code\GreenhouseControlSystem\GreenhouseControlSystem;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectName)\GreenhouseControlSystem\drivers;$(ProjectName)\GreenhouseControlSystem;$(IncludePath)</IncludePath>
+    <ExternalIncludePath>$(ExternalIncludePath)</ExternalIncludePath>
+    <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\GreenhouseControlSystem\moisture.c" />
+    <ClCompile Include="moisture.cpp" />
     <ClCompile Include="temperatureTests.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\GreenhouseControlSystem\drivers\libIotLibrary.a" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
@@ -58,10 +65,13 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>C:\VIA\SEMESTER4\SEP4\CodeTestGit\GreenhouseControlSystem2\GreenhouseControlSystem\drivers;C:\VIA\SEMESTER4\SEP4\CodeTestGit\GreenhouseControlSystem2\GreenhouseControlSystem;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalUsingDirectories>C:\VIA\SEMESTER4\SEP4\CodeTestGit\GreenhouseControlSystem2\GreenhouseControlSystem;%(AdditionalUsingDirectories)</AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>C:\VIA\SEMESTER4\SEP4\CodeTestGit\GreenhouseControlSystem2\GreenhouseControlSystem\drivers;C:\VIA\SEMESTER4\SEP4\CodeTestGit\GreenhouseControlSystem2\GreenhouseControlSystem;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -52,6 +52,7 @@ void initialiseSystem()
 	// Creates tasks
 	createApplicationTask();
 	createTemperatureHumidityTask();
+	moisture_create(); //method to initialize the driver and create task to read from it
 	
 	
 	// ===== BELOW IS LoRaWAN initialisation =====

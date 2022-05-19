@@ -53,7 +53,11 @@ void applicationTask(void* pvParameter){
 		//Tells the CO2 sensor to wake up and collect data
 		//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); 
 		
-		uint8_t bits = BIT_TASK_TEMPHUM; //| BIT_TASK_CO2;
+		//Tells the moisture sensor to start measurements
+		//printf("setting the bit");
+		xEventGroupSetBits(_measureEventGroup, BIT_TASK_MOIST);
+		
+		uint8_t bits = BIT_TASK_TEMPHUM | BIT_TASK_MOIST; //| BIT_TASK_CO2;
 		
 		//wait for the tasks to return with their measurements and set their event group flags							
 		xEventGroupWaitBits(_readingsReadyEventGroup, 
@@ -69,6 +73,9 @@ void applicationTask(void* pvParameter){
 	
 		//getting the calculated temperature from the sensor
 		int16_t measuredTemperature = getTemperature();
+		
+		//printing moisture of the first plant
+		uint16_t* moistureArr = moisture_getMoistures();
 		
 		//providing data for the Lora payload
 		setTemperature(measuredTemperature);
