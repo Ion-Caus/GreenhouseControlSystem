@@ -14,8 +14,16 @@ static int16_t temperature;
 static uint16_t humidity;
 static uint16_t CO2;
 
-
 static uint8_t array_payload[UPLINK_PAYLOAD_LENGHT] = {0};
+
+//TODO: refactor to a struct instead of array	
+//typedef struct measurements {
+	//int16_t temperature;
+	//uint16_t humidity;
+	//uint16_t CO2;
+	//} measurements_t;
+	//
+//static measurements_t sensorData;
 
 void setTemperature(int16_t temp){
 	temperature = temp;
