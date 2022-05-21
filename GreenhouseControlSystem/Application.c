@@ -78,7 +78,7 @@ void applicationTask(void* pvParameter){
 		setHumidity(measuredHumidity);
 	
 		//getting Lora payload package
-		uint8_t* payload = getArrPayload();
+		measurements_t payload = getSensorData();
 		puts("Application task got the payload\n");
 		
 		if (!xMessageBufferIsEmpty(upLinkBuffer)) {
@@ -88,7 +88,7 @@ void applicationTask(void* pvParameter){
 	
 		//sending the payload to upLink buffer
 		size_t sentBytes = xMessageBufferSend(upLinkBuffer,
-			(void*)payload,
+			(void*)&payload,
 			UPLINK_PAYLOAD_LENGHT,
 			portMAX_DELAY);
 		
