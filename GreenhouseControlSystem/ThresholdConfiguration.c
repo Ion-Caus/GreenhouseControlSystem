@@ -17,7 +17,7 @@ static uint16_t CO2ThresholdLower;
 
 SemaphoreHandle_t lock;
 
-void createThresholdConfig(){
+void thresholdMutex_create(){
 	lock = xSemaphoreCreateMutex();	
 	temperatureThresholdLower = SHRT_MIN;
 	temperatureThresholdUpper = SHRT_MAX;

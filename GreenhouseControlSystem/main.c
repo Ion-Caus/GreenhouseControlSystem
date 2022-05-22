@@ -26,6 +26,8 @@
 
 #include "payloadConfig.h"
 
+#include "ThresholdConfiguration.h"
+
 
 MessageBufferHandle_t upLinkBuffer;
 MessageBufferHandle_t downLinkBuffer;
@@ -35,6 +37,10 @@ MessageBufferHandle_t downLinkBuffer;
 void initBuffers() {
 	upLinkBuffer =  xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
 	downLinkBuffer = xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
+}
+
+void initThresholdMutex() {
+	thresholdMutex_create();
 }
 
 /*-----------------------------------------------------------*/
@@ -48,6 +54,8 @@ void initialiseSystem()
 	
 	// Initialize buffers for upLink and downLink Lora handler
 	initBuffers();
+	
+	initThresholdMutex();
 	
 	// Creates tasks
 	createApplicationTask();

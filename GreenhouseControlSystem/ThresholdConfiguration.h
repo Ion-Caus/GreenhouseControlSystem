@@ -10,7 +10,7 @@
 
 #include <stdint.h>
 
-void create();
+void thresholdMutex_create();
 int16_t getTemperatureThresholdUpper();
 int16_t getTemperatureThresholdLower();
 uint16_t getCo2ThresholdUpper();
