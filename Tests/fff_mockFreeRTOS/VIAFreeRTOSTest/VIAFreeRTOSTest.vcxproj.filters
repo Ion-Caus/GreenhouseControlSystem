@@ -19,7 +19,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="FreeRTOS.h">
+    <ClInclude Include="ATMEGA_FreeRTOS.h">
       <Filter>FreeRTOS\src</Filter>
     </ClInclude>
     <ClInclude Include="task.h">
