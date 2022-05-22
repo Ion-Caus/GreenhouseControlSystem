@@ -178,5 +178,5 @@ void createTemperatureHumidityTask(void) {
 
  
 void temperatureHumidity_destroy() {
-	hih8120_destroy();
+	//hih8120_destroy();
 }
