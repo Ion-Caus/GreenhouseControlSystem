@@ -5,7 +5,10 @@
 int16_t getTemperature();
 uint16_t getHumidity();
 
-void initTempDriver();
+int16_t calculateWeightedAverage(int16_t arr[], uint8_t size);
 void createTemperatureHumidityTask(void);
-int16_t calculateWeightedAverage(int16_t array[], uint8_t size);
-void temperatureHumidity_destroy();
+void temperatureHumidity_destroy(void);
+
+// for testing
+void initTempDriver();
+void tempHumTask_run(int16_t* temperatureArray, int16_t* humidityArray, uint8_t* index);

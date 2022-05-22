@@ -20,3 +20,7 @@
 
 void createApplicationTask(void);
 
+
+EventGroupHandle_t _measureEventGroup;
+EventGroupHandle_t _readingsReadyEventGroup;
+
