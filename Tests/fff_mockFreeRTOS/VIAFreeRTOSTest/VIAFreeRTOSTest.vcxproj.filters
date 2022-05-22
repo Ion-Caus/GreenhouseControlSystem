@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\VIAFreeRTOS-Windows\myTask2.c" />
-    <ClCompile Include="MyTaskTest.cpp" />
-    <ClCompile Include="..\VIAFreeRTOS-Windows\MySecondTask.c" />
-    <ClCompile Include="MySecondTaskTest.cpp" />
     <ClCompile Include="FreeRTOS_FFF_MocksDefinitions.cpp" />
   </ItemGroup>
   <ItemGroup>
