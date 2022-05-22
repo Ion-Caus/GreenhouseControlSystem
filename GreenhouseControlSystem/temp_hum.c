@@ -2,9 +2,9 @@
  * temperature.c
  *
  * Created: 4/29/2022 11:26:27 PM
- *  Author: ionc
+ *  Author: ionc & alex
  */ 
-#include "temperature.h"
+#include "temp_hum.h"
 #include "application.h"
 
 #include <stdint.h>
@@ -19,25 +19,32 @@
 
 #include <stdio_driver.h>
 
-#define TEMP_DELAY_MS				(200)
+#define TEMP_HUM_DELAY_MS			(200)
+#define MAX_RETRIES					(5)
 
 // move to .h
-#define TEMPERATURE_TASK_STACK		( configMINIMAL_STACK_SIZE )
-#define TEMPERATURE_TASK_PRIORITY	( tskIDLE_PRIORITY + 1 )
+#define TEMP_HUM_TASK_STACK			( configMINIMAL_STACK_SIZE )
+#define TEMP_HUM_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
 
 #define MIN_TEMPERATURE				(-20 * 10)
 #define MAX_TEMPERATUE				(40 * 10)
+#define MAX_HUMIDITY				(1000) // 100%
 
-#define TEMPERATURE_ARRAY_SIZE		(10)
-
+#define TEMP_HUM_ARRAY_SIZE			(10)
 
 static int16_t weightedTemperature;
+static uint16_t weightedHumidity;
 
 extern EventGroupHandle_t _measureEventGroup;
 extern EventGroupHandle_t _readingsReadyEventGroup;
 
+
 int16_t getTemperature() {
 	return weightedTemperature;
+}
+
+uint16_t getHumidity() {
+	return weightedHumidity;
 }
 
 int16_t calculateWeightedAverage(int16_t array[], uint8_t size) {
@@ -54,25 +61,28 @@ int16_t calculateWeightedAverage(int16_t array[], uint8_t size) {
 void initTempDriver() {
 	hih8120_driverReturnCode_t returnCode = hih8120_initialise();
 	
-	if (returnCode != HIH8120_OK) {
-		puts("Temperature driver failed to initialize.\n");
-		return;
+	for (int i = 0; i < MAX_RETRIES; i++) {
+		if (returnCode != HIH8120_OK) {
+			puts("Temperature/humidity driver failed to initialize.\n");
+			return;
+		}
 	}
 	
-	puts("Temperature driver initialized.\n");
+	puts("Temperature/humidity driver initialized.\n");
 }
 
-
-void temperatureTask(void* pvParameter) {
+// task that awakens the driver and gets measurements of temperature and humidity
+void temperatureHumidityTask(void* pvParameter) {
 	 (void) pvParameter;
 	 
 	 TickType_t xLastWakeTime;
-	 const TickType_t xFrequency = TEMP_DELAY_MS/portTICK_PERIOD_MS;
+	 const TickType_t xFrequency = TEMP_HUM_DELAY_MS/portTICK_PERIOD_MS;
 
 	 xLastWakeTime = xTaskGetTickCount();
 	 
-	 // temporary array to store measurements to calculate a weighted average
-	 int16_t temperatureArray[TEMPERATURE_ARRAY_SIZE];
+	 // temporary arrays to store measurements to calculate a weighted average
+	 int16_t temperatureArray[TEMP_HUM_ARRAY_SIZE];
+	 int16_t humidityArray[TEMP_HUM_ARRAY_SIZE];
 	 
 	 uint8_t index = 0; 
 	 for (;;)
@@ -89,14 +99,14 @@ void temperatureTask(void* pvParameter) {
 		 
 		 hih8120_driverReturnCode_t returnCode;
 		 if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
-			 printf("Temperature Driver failed to wake up, %d\n", returnCode);
+			 printf("Temperature/humidity driver failed to wake up, %d\n", returnCode);
 			 continue;
 		 }
 		 
 		 xTaskDelayUntil( &xLastWakeTime, pdMS_TO_TICKS(100) );
 		 
 		 if (HIH8120_OK != (returnCode = hih8120_measure())) {
-			 printf("Temperature Driver failed to measure, %d\n", returnCode);
+			 printf("Temperature/humidity driver failed to measure, %d\n", returnCode);
 			 continue;
 		 }
 		 
@@ -104,20 +114,28 @@ void temperatureTask(void* pvParameter) {
 		 
 		 // get the temperature value
 		 int16_t temperature = hih8120_getTemperature_x10();
+		 uint16_t humidity = hih8120_getHumidityPercent_x10();
 		 
 		 if (temperature < MIN_TEMPERATURE || temperature > MAX_TEMPERATUE)
 		 {
 			 // if temperature exceeds realistic values
 			 continue;
 		 }
+		 
+		 if (humidity > MAX_HUMIDITY) {
+			 continue; // humidity exceeds the norm
+		 }
 			
 		 // populate the array with samples
 		 temperatureArray[index] = temperature;
-		 
 		 printf("Temperature : %d\n", temperatureArray[index]);
 		 
+		 humidityArray[index] = humidity;
+		 printf("Humidity : %d\n", humidityArray[index]);
+		 
+		 
 		 // fill the array to be able to calculate the weighted average
-		 if (++index < TEMPERATURE_ARRAY_SIZE) {
+		 if (++index < TEMP_HUM_ARRAY_SIZE) {
 			xTaskDelayUntil( &xLastWakeTime, xFrequency );
 			continue;
 		 }
@@ -125,36 +143,40 @@ void temperatureTask(void* pvParameter) {
 		 // reset index 
 		 index = 0;
 		 
-		 
-		 // calculation of weighted average temperature 
-		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMPERATURE_ARRAY_SIZE);
-		 
+		 		 
+		 // calculation of weighted averages
+		 weightedTemperature = calculateWeightedAverage(temperatureArray, TEMP_HUM_ARRAY_SIZE);
 		 printf("Weighted average temperature: %d\n", weightedTemperature);
 		 
-		 // announce application task that the data is ready to be taken
-		 xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
+		 weightedHumidity = calculateWeightedAverage(humidityArray, TEMP_HUM_ARRAY_SIZE);
+		 printf("Weighted average humidity: %d\n", weightedHumidity);
 		 
 		 
-		 xTaskDelayUntil( &xLastWakeTime, xFrequency);
+		  // announce application task that the data is ready to be taken
+		  xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_TEMPHUM);
+		  
+		  
+		  xTaskDelayUntil( &xLastWakeTime, xFrequency);
 	 }
 }
 
- 
-void createTemperatureTask(void) {
-	
-	
+
+void createTemperatureHumidityTask(void) {
+		 
 	initTempDriver();
 	
 	xTaskCreate(
-		temperatureTask,		// function task name
-		"Temperature Task",		// task name
-		TEMPERATURE_TASK_STACK,
+		temperatureHumidityTask,		// function task name
+		"Temperature Task",				// task name
+		TEMP_HUM_TASK_STACK,
 		NULL,
-		TEMPERATURE_TASK_PRIORITY,
+		TEMP_HUM_TASK_PRIORITY,
 		NULL
 	);
+
 }
 
-void tempeperature_destory() {
+ 
+void temperatureHumidity_destroy() {
 	//hih8120_destroy();
 }
