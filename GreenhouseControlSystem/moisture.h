@@ -21,7 +21,7 @@ void moisture_createTask(void);
 void moisture_destroy();
 
 //method to be used for testing 
-static uint8_t _fake_moisture_measurement(uint8_t previousMeasurement);
+uint8_t _fake_moisture_measurement(uint8_t previousMeasurement);
 void moisture_taskRun(void);
 
 #endif /* MOISTURE_H_ */

@@ -19,6 +19,7 @@
 #include "event_groups.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 #include "sensorDataPackageHandler.h"
 
 #include "payloadConfig.h"

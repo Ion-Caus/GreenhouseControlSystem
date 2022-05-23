@@ -102,7 +102,7 @@ void moisture_task(void* pvParameters) {
 	}
 }
 
-static uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
+uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
 	uint16_t currentMeasurement = sen14262_envelope();
 	//printf("%d, ",currentMeasurement);
 	int8_t sign;

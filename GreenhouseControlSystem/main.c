@@ -23,6 +23,7 @@
 #include "upLinkHandler_LoraWAN.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 
 #include "payloadConfig.h"
 
