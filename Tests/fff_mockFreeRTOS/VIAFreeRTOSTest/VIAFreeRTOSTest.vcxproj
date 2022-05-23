@@ -39,11 +39,7 @@
     <IncludePath>D:\VIAUC\Programming\Under_Git_Control\C\GoogleTestDemo\VIAFreeRTOS-Windows;D:\VIAUC\Programming\Under_Git_Control\C\GoogleTestDemo\VIAFreeRTOSTest;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\VIAFreeRTOS-Windows\MySecondTask.c" />
-    <ClCompile Include="..\VIAFreeRTOS-Windows\myTask2.c" />
     <ClCompile Include="FreeRTOS_FFF_MocksDefinitions.cpp" />
-    <ClCompile Include="MySecondTaskTest.cpp" />
-    <ClCompile Include="MyTaskTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -51,7 +47,7 @@
   <ItemGroup>
     <ClInclude Include="event_groups.h" />
     <ClInclude Include="FreeRTOS_FFF_MocksDeclaration.h" />
-    <ClInclude Include="FreeRTOS.h" />
+    <ClInclude Include="ATMEGA_FreeRTOS.h" />
     <ClInclude Include="message_buffer.h" />
     <ClInclude Include="queue.h" />
     <ClInclude Include="semphr.h" />

@@ -37,11 +37,11 @@
     <IncludePath>$(SolutionDir)Tests\fff_mockFreeRTOS\fff;$(SolutionDir)Tests\fff_mockFreeRTOS\VIAFreeRTOSTest;$(SolutionDir)GreenhouseControlSystem\drivers;$(SolutionDir)GreenhouseControlSystem</IncludePath>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="..\GreenhouseControlSystem\temperature.c" />
+    <ClCompile Include="..\GreenhouseControlSystem\temp_hum.c" />
     <ClCompile Include="fff_mockFreeRTOS\VIAFreeRTOSTest\FreeRTOS_FFF_MocksDefinitions.cpp" />
     <ClCompile Include="..\GreenhouseControlSystem\moisture.c" />
     <ClCompile Include="moisture.cpp" />
-    <ClCompile Include="temperatureTests.cpp" />
+    <ClCompile Include="tempHum_Tests.cpp" />
     <ClCompile Include="test.cpp" />
   </ItemGroup>
   <ItemGroup>

@@ -385,9 +385,6 @@
     <Compile Include="LorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="LoRaWANHandler.c">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>
