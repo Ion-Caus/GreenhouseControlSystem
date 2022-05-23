@@ -25,8 +25,6 @@
 
 #define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
 
-EventGroupHandle_t _measureEventGroup;
-EventGroupHandle_t _readingsReadyEventGroup;
 
 extern MessageBufferHandle_t upLinkBuffer; 
 
