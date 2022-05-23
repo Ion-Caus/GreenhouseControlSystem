@@ -156,7 +156,8 @@ void upLinkHandler_task( void *pvParameters )
 		
 		// no need for bit shift
 		for (uint8_t i = 0; i < bytesReceived; i++) {
-			_uplink_payload.bytes[i] = payloadBuffer[i]; 
+			uint8_t index = (i % 2 == 0) ? i+1 : i-1;
+			_uplink_payload.bytes[i] = payloadBuffer[index]; 
 		}
 		
 		
