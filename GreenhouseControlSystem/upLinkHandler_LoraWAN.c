@@ -154,7 +154,7 @@ void upLinkHandler_task( void *pvParameters )
 		}
 		printf("\n");
 		
-		// ? no need for bit shift
+		// no need for bit shift
 		for (uint8_t i = 0; i < bytesReceived; i++) {
 			_uplink_payload.bytes[i] = payloadBuffer[i]; 
 		}

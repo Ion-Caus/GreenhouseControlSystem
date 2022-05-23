@@ -52,12 +52,15 @@ void downLinkHandler_task( void *pvParameters )
 		}
 		printf("\n");
 		
-		int16_t tempMin = loraPayload.bytes[0] | loraPayload.bytes[1] << 8;
-		int16_t tempMax = loraPayload.bytes[2] | loraPayload.bytes[2] << 8;
 		puts("Setting the Thresholds.\n");
+		int16_t tempMin = loraPayload.bytes[0] | loraPayload.bytes[1] << 8;
+		int16_t tempMax = loraPayload.bytes[2] | loraPayload.bytes[3] << 8;
 		
-		printf("%d, %d", tempMin, tempMax);
-		// ToDo : call the config and set the thresholds
+		uint16_t co2Min = loraPayload.bytes[4] | loraPayload.bytes[5] << 8;
+		uint16_t co2Max = loraPayload.bytes[6] | loraPayload.bytes[7] << 8;
+		
+		printf("%d, %d\n", tempMin, tempMax);
+		printf("%d, %d\n", co2Min, co2Max);
 	}
 }
 
