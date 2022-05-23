@@ -12,6 +12,7 @@
 #include <lora_driver.h>
 
 #include "downLinkHandler.h"
+#include "ThresholdConfiguration.h"
 
 
 #define DOWNLINK_HANDLER_TASK_DELAY_MS				(60L * 1000) // Check the buffer every 1 minute
@@ -22,6 +23,8 @@
 
 extern MessageBufferHandle_t downLinkBuffer;
 
+static lora_driver_payload_t loraPayload;
+
 void downLinkHandler_task( void *pvParameters )
 {
 	
@@ -29,9 +32,7 @@ void downLinkHandler_task( void *pvParameters )
 	
 	const TickType_t xFrequency = pdMS_TO_TICKS(DOWNLINK_HANDLER_TASK_DELAY_MS);
 	xLastWakeTime = xTaskGetTickCount();
-	
-	
-	uint8_t payloadBuffer[sizeof(lora_driver_payload_t)] = {0};
+
 	
 	for(;;)
 	{
@@ -40,26 +41,22 @@ void downLinkHandler_task( void *pvParameters )
 		// receiving the payload from the downLink buffer
 		// wait until is not empty
 		xMessageBufferReceive(downLinkBuffer,
-		(void*)payloadBuffer,
+		(void*)&loraPayload,
 		sizeof(lora_driver_payload_t),
 		portMAX_DELAY);
 		
 		printf("Received message from DownLinkBuffer\n");
 		
-		for (uint8_t i = 0; i < sizeof(lora_driver_payload_t); i++) {
-			printf("%d, ", payloadBuffer[i]);
+		for (uint8_t i = 0; i < loraPayload.len; i++) {
+			printf("%d, ", loraPayload.bytes[i]);
 		}
 		printf("\n");
 		
+		int16_t tempMin = loraPayload.bytes[0] | loraPayload.bytes[1] << 8;
+		int16_t tempMax = loraPayload.bytes[2] | loraPayload.bytes[2] << 8;
+		puts("Setting the Thresholds.\n");
 		
-		
-		puts("Uploading Thresholds.\n");
-		
-	 
-		for (uint8_t i = 0; i < ((lora_driver_payload_t*)payloadBuffer)->len; i++) {
-			printf("%d, ", ((lora_driver_payload_t*)payloadBuffer)->bytes[i]);
-		}
-		printf("\n");
+		printf("%d, %d", tempMin, tempMax);
 		// ToDo : call the config and set the thresholds
 	}
 }

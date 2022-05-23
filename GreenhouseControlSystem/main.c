@@ -19,20 +19,30 @@
 #include <status_leds.h>
 
 #include "upLinkHandler_LoraWAN.h"
+#include "downLinkHandler.h"
 #include "application.h"
 #include "temp_hum.h"
 
 #include "payloadConfig.h"
 
+#include "ThresholdConfiguration.h"
+#include "sensorDataPackageHandler.h"
 
+
+MessageBufferHandle_t windowBuffer;
 MessageBufferHandle_t upLinkBuffer;
 MessageBufferHandle_t downLinkBuffer;
 
 
 /*-----------------------------------------------------------*/
 void initBuffers() {
-	upLinkBuffer =  xMessageBufferCreate( UPLINK_PAYLOAD_LENGHT * 2 );
+	windowBuffer =  xMessageBufferCreate( sizeof(measurements_t) * 2 );
+	upLinkBuffer =  xMessageBufferCreate( sizeof(measurements_t) * 2 );
 	downLinkBuffer = xMessageBufferCreate( sizeof(lora_driver_payload_t) * 2 );
+}
+
+void initThresholdMutex() {
+	thresholdMutex_create();
 }
 
 /*-----------------------------------------------------------*/
@@ -46,6 +56,8 @@ void initialiseSystem()
 	
 	// Initialize buffers for upLink and downLink Lora handler
 	initBuffers();
+	
+	initThresholdMutex();
 	
 	// Creates tasks
 	createApplicationTask();
