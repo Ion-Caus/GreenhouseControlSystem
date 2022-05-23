@@ -18,15 +18,13 @@
 #include <stdio_driver.h>
 #include "event_groups.h"
 #include "application.h"
-#include "temperature.h"
+#include "temp_hum.h"
 #include "sensorDataPackageHandler.h"
 
 #include "payloadConfig.h"
 
 #define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
 
-EventGroupHandle_t _measureEventGroup;
-EventGroupHandle_t _readingsReadyEventGroup;
 
 extern MessageBufferHandle_t upLinkBuffer; 
 

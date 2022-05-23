@@ -1,5 +1,10 @@
 # IoT part of semester project
 
-to be able to build the project you need to remove `GreenhouseControlSystem/FreeRTOS/Example/main.c` file.
+*Greenhouse control system*
 
-**this program can not build** this issue will be asked supervisors next time
+## testing
+testing in this project is made using google test and mocking.
+to test something there is test solution for visual studio.
+
+To test some new .c file you need to add the file to the project _right click on solution -> add -> existing file -> navigate to the .c file_.
+

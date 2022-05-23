@@ -147,7 +147,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="application.c">
+    <Compile Include="Application.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="application.h">
@@ -210,16 +210,16 @@
     <Compile Include="payloadConfig.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="SensorDataPackageHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="sensorDataPackageHandler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="sensorDataPackageHandler.c">
+    <Compile Include="temp_hum.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="temperature.c">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="temperature.h">
+    <Compile Include="temp_hum.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="upLinkHandler_LoraWAN.c">
@@ -382,7 +382,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="lorawanConfig.h">
+    <Compile Include="LorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
