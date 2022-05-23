@@ -118,7 +118,7 @@ void initLoraWAN(void) {
 
 	_lora_setup();
 
-	_uplink_payload.len = UPLINK_PAYLOAD_LENGHT;
+	_uplink_payload.len = sizeof(measurements_t);
 	_uplink_payload.portNo = UPLINK_PAYLOAD_PORTNO;
 }
 

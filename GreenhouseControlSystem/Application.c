@@ -23,7 +23,7 @@
 
 #include "payloadConfig.h"
 
-#define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
+#define APPICATION_TASK_DELAY_MS				(100000UL)
 
 
 extern MessageBufferHandle_t windowBuffer; 
@@ -72,12 +72,13 @@ void applicationTask(void* pvParameter){
 		//getting the calculated temperature from the sensor
 		uint16_t measuredHumidity = getHumidity();
 		
-		//providing data for the Lora payload
+		//providing data for the sensor package
+		sensorDataPackage_reset();
 		setTemperature(measuredTemperature);
 		setHumidity(measuredHumidity);
 	
 		//getting measurements data package
-		measurements_t payload = getSensorData();
+		measurements_t package = getSensorData();
 		puts("Application task got the data package\n");
 		
 		if (!xMessageBufferIsEmpty(upLinkBuffer)) {
@@ -87,7 +88,7 @@ void applicationTask(void* pvParameter){
 	
 		//sending the payload to upLink buffer
 		size_t sentBytes = xMessageBufferSend(upLinkBuffer,
-			(void*)&payload,
+			(void*)&package,
 			sizeof(measurements_t),
 			portMAX_DELAY);
 		
@@ -95,7 +96,7 @@ void applicationTask(void* pvParameter){
 		
 		//sending the payload to upLink buffer
 		sentBytes = xMessageBufferSend(windowBuffer,
-		(void*)&payload,
+		(void*)&package,
 		sizeof(measurements_t),
 		portMAX_DELAY);
 		

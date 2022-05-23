@@ -8,5 +8,4 @@
 
 #pragma once
 
-#define UPLINK_PAYLOAD_LENGHT		(6)
-#define UPLINK_PAYLOAD_PORTNO		(4)
+#define UPLINK_PAYLOAD_PORTNO		(5)

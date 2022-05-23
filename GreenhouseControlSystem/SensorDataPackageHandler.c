@@ -11,6 +11,12 @@
 	
 static measurements_t sensordata;
 
+void sensorDataPackage_reset() {
+	sensordata.temperature = 0;
+	sensordata.humidity = 0;
+	sensordata.co2 = 0;
+}
+
 void setTemperature(int16_t temp){
 	sensordata.temperature = temp;
 }

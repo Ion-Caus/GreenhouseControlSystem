@@ -17,6 +17,8 @@ typedef struct measurements {
 	uint16_t co2;
 } measurements_t;
 
+void sensorDataPackage_reset(void);
+
 void setTemperature(int16_t temp);
 void setHumidity(uint16_t hum);
 void setCO2(uint16_t co2);

@@ -40,7 +40,7 @@ void downLinkHandler_task( void *pvParameters )
 		
 		// receiving the payload from the downLink buffer
 		// wait until is not empty
-		xMessageBufferReceive(downLinkBuffer,
+		size_t bytesReceived = xMessageBufferReceive(downLinkBuffer,
 		(void*)&loraPayload,
 		sizeof(lora_driver_payload_t),
 		portMAX_DELAY);
@@ -52,6 +52,8 @@ void downLinkHandler_task( void *pvParameters )
 		}
 		printf("\n");
 		
+		if (bytesReceived < 8) continue;
+		
 		puts("Setting the Thresholds.\n");
 		int16_t tempMin = loraPayload.bytes[0] | loraPayload.bytes[1] << 8;
 		int16_t tempMax = loraPayload.bytes[2] | loraPayload.bytes[3] << 8;
@@ -61,6 +63,12 @@ void downLinkHandler_task( void *pvParameters )
 		
 		printf("%d, %d\n", tempMin, tempMax);
 		printf("%d, %d\n", co2Min, co2Max);
+		
+		setTempThresholdLower(tempMin);
+		setTempThresholdUpper(tempMax);
+		
+		setCo2ThresholdLower(co2Min);
+		setCo2ThresholdUpper(co2Max);
 	}
 }
 
