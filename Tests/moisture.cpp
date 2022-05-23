@@ -90,7 +90,7 @@ TEST_F(MoistureTest, get_moisture_task_value) {
 
 	myPots = moisture_getMoistures();
 
-	ASSERT_EQ(sen14262_envelope_fake.call_count, (uint8_t) -1);
+	ASSERT_EQ(sen14262_envelope_fake.call_count, 6	);
 
 	ASSERT_LT(myPots[0], TOP_MOISTURE + 2);
 	ASSERT_GT(myPots[0], LOW_MOISTURE - 2);
