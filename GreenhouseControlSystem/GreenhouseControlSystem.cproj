@@ -147,16 +147,31 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Application.c">
+    <Compile Include="application.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="application.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buffersHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buffersHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="downLinkHandler.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="downLinkHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eventGroupsHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eventGroupsHandler.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="ThresholdConfiguration.c">
@@ -211,9 +226,6 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="drivers\twi.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="payloadConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="SensorDataPackageHandler.c">

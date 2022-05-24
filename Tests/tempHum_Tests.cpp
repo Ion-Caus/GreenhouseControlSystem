@@ -15,6 +15,7 @@ extern "C" {
 	#include <semphr.h>
 	#include <hih8120.h>
 	#include <stdio_driver.h>
+	#include "eventGroupsHandler.h"
 }
 
 FAKE_VALUE_FUNC(hih8120_driverReturnCode_t, hih8120_initialise);
@@ -68,7 +69,7 @@ TEST_F(TempHumTest, temHum_task_run) {
 
 	// Act
 	// missing the last sample, then calling the weigthed average
-	tempHumTask_run(tempArr, humArr, &index);
+	tempHum_task_run(tempArr, humArr, &index);
 
 	// Assert
 	ASSERT_EQ(xEventGroupWaitBits_fake.call_count, 1); 
@@ -77,8 +78,8 @@ TEST_F(TempHumTest, temHum_task_run) {
 
 	ASSERT_EQ(xEventGroupSetBits_fake.call_count, 1); // set the bit that the weighted averages are ready
 
-	ASSERT_EQ(getTemperature(), 237); // weighted average for temerature;
-	ASSERT_EQ(getHumidity(), 766); // weighted average for humidity;
+	ASSERT_EQ(tempHum_getTemperature(), 237); // weighted average for temerature;
+	ASSERT_EQ(tempHum_getHumidity(), 766); // weighted average for humidity;
 
 	ASSERT_EQ(index, 0); // reset index
 }
@@ -86,13 +87,13 @@ TEST_F(TempHumTest, temHum_task_run) {
 TEST_F(TempHumTest, temperature_succesfull_init) {
 	hih8120_initialise_fake.return_val = HIH8120_OK;
 
-	initTempDriver();
+	tempHum_initDriver();
 	ASSERT_EQ(hih8120_initialise_fake.call_count, 1);
 }
 
 TEST_F(TempHumTest, temperature_unsuccesfull_init) {
 	hih8120_initialise_fake.return_val = HIH8120_DRIVER_NOT_INITIALISED;
 
-	initTempDriver();
+	tempHum_initDriver();
 	ASSERT_EQ(hih8120_initialise_fake.call_count, 5);
 }
