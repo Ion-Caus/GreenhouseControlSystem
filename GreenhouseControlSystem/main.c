@@ -14,7 +14,6 @@
 #include <stdio_driver.h>
 #include <serial.h>
 
- // Needed for LoRaWAN
 #include <lora_driver.h>
 #include <status_leds.h>
 
@@ -24,27 +23,35 @@
 #include "temp_hum.h"
 #include "co2.h"
 #include "weighted_average.h"
+#include "moisture.h"
 
-#include "payloadConfig.h"
+#include "config.h"
+#include "lorawanConfig.h"
 
-#include "ThresholdConfiguration.h"
+#include "thresholdConfiguration.h"
 #include "sensorDataPackageHandler.h"
 
-
-MessageBufferHandle_t windowBuffer;
-MessageBufferHandle_t upLinkBuffer;
-MessageBufferHandle_t downLinkBuffer;
+#include "buffersHandler.h"
+#include "eventGroupsHandler.h"
 
 
-/*-----------------------------------------------------------*/
-void initBuffers() {
-	windowBuffer =  xMessageBufferCreate( sizeof(measurements_t) * 2 );
-	upLinkBuffer =  xMessageBufferCreate( sizeof(measurements_t) * 2 );
-	downLinkBuffer = xMessageBufferCreate( sizeof(lora_driver_payload_t) * 2 );
+extern MessageBufferHandle_t downlinkBuffer;
+
+void structures_create() {
+	// created the message buffer for window, upLink and downLink task
+	buffersHandler_create();
+	
+	// creates the event group of the application and sensors tasks
+	eventGroupsHandler_create();
+	
+	// creates the threshold mutex
+	thresholdMutex_create();
 }
 
-void initThresholdMutex() {
-	thresholdMutex_create();
+void tasks_create() {
+	application_task_create();
+	tempHum_task_create();
+	moisture_task_create();
 }
 
 /*-----------------------------------------------------------*/
@@ -56,28 +63,21 @@ void initialiseSystem()
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
 	stdio_initialise(ser_USART0);
 	
-	// Initialize buffers for upLink and downLink Lora handler
-	initBuffers();
-	
-	initThresholdMutex();
-	
-	// Creates tasks
-	createApplicationTask();
-	createCo2Task();
-	createTemperatureHumidityTask();
+	// Create tasks
+	tasks_create();
 	
 	// ===== BELOW IS LoRaWAN initialisation =====
 	// Status LEDs driver
-	status_leds_initialise(5); // Priority 5 for internal task
+	status_leds_initialise(LEDS_STATUS_PRIORITY);
 		
 	// Initialize the LoRaWAN driver with a down-link buffer
-	lora_driver_initialise(1, downLinkBuffer);
+	lora_driver_initialise(DOWNLINK_COM_PORT, downLinkBuffer);
 	
-	// Create UpLinkHandler and setup LoRaWAN with priority 3
-	upLinkHandler_task_init(3);
+	// Create UpLinkHandler and setup LoRaWAN
+	upLinkHandler_task_create();
 	
 	// Create DownLinkTaskHandler 
-	downLinkHandler_task_init();
+	downLinkHandler_task_create();
 }
 
 /*-----------------------------------------------------------*/

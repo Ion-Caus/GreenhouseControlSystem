@@ -41,7 +41,7 @@
       </framework-data>
     </AsfFrameworkConfig>
     <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
-    <avrtoolserialnumber>J42700025529</avrtoolserialnumber>
+    <avrtoolserialnumber>J42700025571</avrtoolserialnumber>
     <avrdeviceexpectedsignature>0x1E9801</avrdeviceexpectedsignature>
     <com_atmel_avrdbg_tool_atmelice>
       <ToolOptions>
@@ -51,7 +51,7 @@
         <InterfaceName>JTAG</InterfaceName>
       </ToolOptions>
       <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
-      <ToolNumber>J42700025529</ToolNumber>
+      <ToolNumber>J42700025571</ToolNumber>
       <ToolName>Atmel-ICE</ToolName>
     </com_atmel_avrdbg_tool_atmelice>
     <avrtoolinterface>JTAG</avrtoolinterface>
@@ -147,7 +147,7 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Application.c">
+    <Compile Include="application.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="application.h">
@@ -159,16 +159,31 @@
     <Compile Include="co2.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="buffersHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buffersHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="config.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="downLinkHandler.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="downLinkHandler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.c">
+    <Compile Include="eventGroupsHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.h">
+    <Compile Include="eventGroupsHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="thresholdConfiguration.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="thresholdConfiguration.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="drivers\display_7seg.h">
@@ -219,10 +234,13 @@
     <Compile Include="drivers\twi.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="payloadConfig.h">
+    <Compile Include="moisture.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SensorDataPackageHandler.c">
+    <Compile Include="moisture.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="sensorDataPackageHandler.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sensorDataPackageHandler.h">
@@ -400,7 +418,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="LorawanConfig.h">
+    <Compile Include="lorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

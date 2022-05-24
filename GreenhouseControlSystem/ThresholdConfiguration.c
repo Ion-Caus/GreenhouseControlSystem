@@ -1,5 +1,5 @@
 /*
- * ThresholdConfiguration.c
+ * thresholdConfiguration.c
  *
  * Created: 20/05/2022 10.55.44
  *  Author: Deniss
@@ -15,7 +15,7 @@ static int16_t temperatureThresholdLower;
 static uint16_t CO2ThresholdUpper;
 static uint16_t CO2ThresholdLower;
 
-SemaphoreHandle_t lock;
+static SemaphoreHandle_t lock;
 
 void thresholdMutex_create(){
 	lock = xSemaphoreCreateMutex();	
@@ -25,7 +25,7 @@ void thresholdMutex_create(){
 	CO2ThresholdUpper = USHRT_MAX;
 }
 
-int16_t getTemperatureThresholdUpper(){
+int16_t thresholdMutex_getTemperatureUpper(){
 	
 	int16_t temp = 0;
 	
@@ -37,7 +37,7 @@ int16_t getTemperatureThresholdUpper(){
 	return temp;
 }
 
-int16_t getTemperatureThresholdLower(){
+int16_t thresholdMutex_getTemperatureLower(){
 	
 	int16_t temp = 0;
 	
@@ -49,7 +49,7 @@ int16_t getTemperatureThresholdLower(){
 	return temp;
 }
 
-uint16_t getCo2ThresholdUpper(){
+uint16_t thresholdMutex_getCo2Upper(){
 	uint16_t co2 = 0;
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
@@ -60,7 +60,7 @@ uint16_t getCo2ThresholdUpper(){
 	return co2;
 }
 
-uint16_t getCo2ThresholdLower(){
+uint16_t thresholdMutex_getCo2Lower(){
 	uint16_t co2 = 0;
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
@@ -71,7 +71,7 @@ uint16_t getCo2ThresholdLower(){
 	return co2;
 }
 
-void setTempThresholdUpper(int16_t tempThreshold){
+void thresholdMutex_setTempUpper(int16_t tempThreshold){
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
 		temperatureThresholdUpper = tempThreshold;
@@ -79,7 +79,7 @@ void setTempThresholdUpper(int16_t tempThreshold){
 	xSemaphoreGive(lock);
 }
 
-void setTempThresholdLower(int16_t tempThreshold){
+void thresholdMutex_setTempLower(int16_t tempThreshold){
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
 		temperatureThresholdLower = tempThreshold;
@@ -88,7 +88,7 @@ void setTempThresholdLower(int16_t tempThreshold){
 }
 
 
-void setCo2ThresholdUpper(uint16_t co2Threshold){
+void thresholdMutex_setCo2Upper(uint16_t co2Threshold){
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
 		CO2ThresholdUpper = co2Threshold;
@@ -96,7 +96,7 @@ void setCo2ThresholdUpper(uint16_t co2Threshold){
 	xSemaphoreGive(lock);
 }
 
-void setCo2ThresholdLower(uint16_t co2Threshold){
+void thresholdMutex_setCo2Lower(uint16_t co2Threshold){
 	
 	if(xSemaphoreTake(lock, portMAX_DELAY) == pdTRUE){
 		CO2ThresholdLower = co2Threshold;
