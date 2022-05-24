@@ -8,19 +8,27 @@
 #include <stdint.h>
 #include "sensorDataPackageHandler.h"
 #include "payloadConfig.h"
+	
+static measurements_t sensordata;
 
-
-static int16_t temperature;
-static uint8_t array_payload[UPLINK_PAYLOAD_LENGHT] = {0};
-
-void setTemperature(int16_t temp){
-	temperature = temp;
+void sensorDataPackage_reset() {
+	sensordata.temperature = 0;
+	sensordata.humidity = 0;
+	sensordata.co2 = 0;
 }
 
-uint8_t* getArrPayload(){
-	array_payload[0] = temperature >> 8;
-	array_payload[1] = temperature & 0xFF;
-	
-	
-	return array_payload;
+void setTemperature(int16_t temp){
+	sensordata.temperature = temp;
+}
+
+void setHumidity(uint16_t hum){
+	sensordata.humidity = hum;
+}
+
+void setCO2(uint16_t co2ppm){
+	sensordata.co2 = co2ppm;
+}
+
+measurements_t getSensorData(){
+	return sensordata;
 }

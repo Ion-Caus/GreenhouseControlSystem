@@ -15,6 +15,7 @@
 
 #include "lorawanConfig.h"
 #include "upLinkHandler_LoraWAN.h"
+#include "sensorDataPackageHandler.h"
 
 #include "payloadConfig.h"
 
@@ -117,7 +118,7 @@ void initLoraWAN(void) {
 
 	_lora_setup();
 
-	_uplink_payload.len = UPLINK_PAYLOAD_LENGHT;
+	_uplink_payload.len = sizeof(measurements_t);
 	_uplink_payload.portNo = UPLINK_PAYLOAD_PORTNO;
 }
 
@@ -134,28 +135,29 @@ void upLinkHandler_task( void *pvParameters )
 	xLastWakeTime = xTaskGetTickCount();
 	
 	
-	uint8_t payloadBuffer[UPLINK_PAYLOAD_LENGHT] = {0};
+	uint8_t payloadBuffer[sizeof(measurements_t)] = {0};
 	
 	for(;;)
 	{
 		xTaskDelayUntil( &xLastWakeTime, xFrequency );
 		
 		// receiving the payload from the upLink buffer
-		xMessageBufferReceive(upLinkBuffer,
+		size_t bytesReceived = xMessageBufferReceive(upLinkBuffer,
 			(void*)payloadBuffer,
-			UPLINK_PAYLOAD_LENGHT,
+			sizeof(measurements_t),
 			portMAX_DELAY);
 		
 		printf("Received message from UpLinkBuffer\n");
 		
-		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
+		for (uint8_t i = 0; i < bytesReceived; i++) {
 			printf("%d, ", payloadBuffer[i]);
 		}
 		printf("\n");
 		
-
-		for (uint8_t i = 0; i < UPLINK_PAYLOAD_LENGHT; i++) {
-			_uplink_payload.bytes[i] = payloadBuffer[i]; 
+		// no need for bit shift
+		for (uint8_t i = 0; i < bytesReceived; i++) {
+			uint8_t index = (i % 2 == 0) ? i+1 : i-1;
+			_uplink_payload.bytes[i] = payloadBuffer[index]; 
 		}
 		
 		

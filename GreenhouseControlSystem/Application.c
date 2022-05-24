@@ -24,9 +24,10 @@
 
 #include "payloadConfig.h"
 
-#define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
+#define APPICATION_TASK_DELAY_MS				(100000UL)
 
 
+extern MessageBufferHandle_t windowBuffer; 
 extern MessageBufferHandle_t upLinkBuffer; 
 
 void initEventGroups(void){
@@ -72,22 +73,26 @@ void applicationTask(void* pvParameter){
 	
 		//getting the calculated temperature from the sensor
 		int16_t measuredTemperature = getTemperature();
+
+		//getting the calculated humidity from the sensor
+		uint16_t measuredHumidity = getHumidity();
 		
-		//printing moisture of the first plant
+		//geting moisture of plants (from sound sensor)
 		uint8_t* moistureArr = moisture_getMoistures();
 		
-		printf("giving values: ");
-		for (int i = 0; i < 6; i++) {
-			printf("%d, ",moistureArr[i]);
-		} 
-		printf("\n");
+		//printf("moisture values: ");
+		//for (int i = 0; i < 6; i++) {
+		//	printf("%d, ",moistureArr[i]);
+		//} 
+		//printf("\n");
 		
-		//providing data for the Lora payload
+		sensorDataPackage_reset();
 		setTemperature(measuredTemperature);
+		setHumidity(measuredHumidity);
 	
-		//getting Lora payload package
-		uint8_t* payload = getArrPayload();
-		puts("Application task got the payload\n");
+		//getting measurements data package
+		measurements_t package = getSensorData();
+		puts("Application task got the data package\n");
 		
 		if (!xMessageBufferIsEmpty(upLinkBuffer)) {
 			// reset the buffer to override the payload
@@ -96,11 +101,19 @@ void applicationTask(void* pvParameter){
 	
 		//sending the payload to upLink buffer
 		size_t sentBytes = xMessageBufferSend(upLinkBuffer,
-			(void*)payload,
-			UPLINK_PAYLOAD_LENGHT,
+			(void*)&package,
+			sizeof(measurements_t),
 			portMAX_DELAY);
 		
-		printf("Sent payload to upLink buffer, sent bytes =%d\n", sentBytes);
+		printf("Sent data package to upLink buffer, sent bytes =%d\n", sentBytes);
+		
+		//sending the payload to upLink buffer
+		sentBytes = xMessageBufferSend(windowBuffer,
+		(void*)&package,
+		sizeof(measurements_t),
+		portMAX_DELAY);
+		
+		printf("Sent data package to window buffer, sent bytes =%d\n", sentBytes);
 	
 		xTaskDelayUntil( &xLastWakeTime, xFrequency);	
 	}
