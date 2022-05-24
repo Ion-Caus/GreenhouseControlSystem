@@ -15,6 +15,7 @@ extern "C" {
 	#include <semphr.h>
 	#include <hih8120.h>
 	#include <stdio_driver.h>
+	#include "weighted_average.h"
 }
 
 FAKE_VALUE_FUNC(hih8120_driverReturnCode_t, hih8120_initialise);

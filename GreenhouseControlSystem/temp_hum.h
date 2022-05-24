@@ -11,12 +11,6 @@
 
 
 /**
- * Calculates the weighted average from the given array of measurements, 
- * based on the formula avg*0.75 + sample*0.25
- */
-int16_t calculateWeightedAverage(int16_t arr[], uint8_t size);
-
-/**
  * Get the weighted average of the temperature as x10
  * e.g 25.3 -> 253
  */

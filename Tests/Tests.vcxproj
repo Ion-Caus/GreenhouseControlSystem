@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="..\GreenhouseControlSystem\temp_hum.c" />
+    <ClCompile Include="..\GreenhouseControlSystem\weighted_average.c" />
     <ClCompile Include="fff_mockFreeRTOS\VIAFreeRTOSTest\FreeRTOS_FFF_MocksDefinitions.cpp" />
     <ClCompile Include="..\GreenhouseControlSystem\moisture.c" />
     <ClCompile Include="moistureTests.cpp" />

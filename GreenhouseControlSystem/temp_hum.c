@@ -18,6 +18,7 @@
 #include "temp_hum.h"
 #include "application.h"
 #include "eventGroupsHandler.h"
+#include "weighted_average.h"
 #include "config.h"
 
 
@@ -37,17 +38,6 @@ int16_t tempHum_getTemperature() {
 
 uint16_t tempHum_getHumidity() {
 	return weightedHumidity;
-}
-
-
-int16_t calculateWeightedAverage(int16_t arr[], uint8_t size) {
-	// calculates the weighted average for an array of measurements 
-	int16_t weightedAverage = arr[0];
-	for (uint8_t i = 1; i < size; i++) {
-		weightedAverage = ceil( weightedAverage*0.75 + arr[i]*0.25 );
-	}
-	
-	return weightedAverage;
 }
 
 static inline void tempHum_wakeupAndMeasure() {
