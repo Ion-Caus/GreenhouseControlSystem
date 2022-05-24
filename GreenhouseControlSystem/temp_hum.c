@@ -100,10 +100,11 @@ void tempHum_task_run(int16_t* temperatureArray, int16_t* humidityArray, uint8_t
 	
 	// populate the array with samples
 	temperatureArray[(*index)] = temperature;
-	printf("Temperature : %d\n", temperatureArray[(*index)]);
-	
 	humidityArray[(*index)] = humidity;
-	printf("Humidity : %d\n", humidityArray[(*index)]);
+	#if DEV_ENV
+		printf("Temperature : %d\n", temperatureArray[(*index)]);
+		printf("Humidity : %d\n", humidityArray[(*index)]);
+	#endif
 	
 	
 	// arrays must be full before calculating the weighted average

@@ -17,7 +17,7 @@
 #include "upLinkHandler_LoraWAN.h"
 #include "buffersHandler.h"
 
-#include "LorawanConfig.h"
+#include "lorawanConfig.h"
 #include "config.h"
 
 
@@ -134,12 +134,14 @@ void upLinkHandler_task_run(uint8_t* packageBuffer)
 	
 	puts("Received message from UpLinkBuffer\n");
 	
-	// TODO : delete in production
-	for (uint8_t i = 0; i < bytesReceived; i++) {
-		printf("%d, ", packageBuffer[i]);
-	}
-	printf("\n");
-	// --------------------------
+	#if DEV_ENV
+		// TODO : delete in production
+		for (uint8_t i = 0; i < bytesReceived; i++) {
+			printf("%d, ", packageBuffer[i]);
+		}
+		printf("\n");
+		// --------------------------
+	#endif
 	
 	// coping the package into the payload
 	for (uint8_t i = 0; i < bytesReceived; i++) {

@@ -12,7 +12,7 @@
 #include <lora_driver.h>
 
 #include "downLinkHandler.h"
-#include "ThresholdConfiguration.h"
+#include "thresholdConfiguration.h"
 #include "buffersHandler.h"
 
 #include "config.h"
@@ -37,20 +37,22 @@ void downLinkHandler_task_run()
 	
 	printf("Received message from DownLinkBuffer\n");
 	
-	// TODO : delete in production
-	for (uint8_t i = 0; i < loraPayload.len; i++) {
-		printf("%d, ", loraPayload.bytes[i]);
-	}
-	printf("\n");
-	// --------------------------
+	#if DEV_ENV
+		// TODO : delete in production
+		for (uint8_t i = 0; i < loraPayload.len; i++) {
+			printf("%d, ", loraPayload.bytes[i]);
+		}
+		printf("\n");
+		// --------------------------
+	#endif
 	
 	if (bytesReceived < 8) return;
 	
-	int16_t tempMin = loraPayload.bytes[0] | loraPayload.bytes[1] << 8;
-	int16_t tempMax = loraPayload.bytes[2] | loraPayload.bytes[3] << 8;
+	int16_t tempMin = loraPayload.bytes[1] | loraPayload.bytes[0] << 8;
+	int16_t tempMax = loraPayload.bytes[3] | loraPayload.bytes[2] << 8;
 	
-	uint16_t co2Min = loraPayload.bytes[4] | loraPayload.bytes[5] << 8;
-	uint16_t co2Max = loraPayload.bytes[6] | loraPayload.bytes[7] << 8;
+	uint16_t co2Min = loraPayload.bytes[5] | loraPayload.bytes[4] << 8;
+	uint16_t co2Max = loraPayload.bytes[7] | loraPayload.bytes[6] << 8;
 	
 	puts("Updating the Thresholds.\n");
 	

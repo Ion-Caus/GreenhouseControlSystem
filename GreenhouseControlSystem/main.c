@@ -23,9 +23,9 @@
 #include "temp_hum.h"
 
 #include "config.h"
-#include "LorawanConfig.h"
+#include "lorawanConfig.h"
 
-#include "ThresholdConfiguration.h"
+#include "thresholdConfiguration.h"
 #include "sensorDataPackageHandler.h"
 
 #include "buffersHandler.h"

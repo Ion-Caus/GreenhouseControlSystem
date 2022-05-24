@@ -1,5 +1,5 @@
 /*
- * SensorDataPackageHandler.c
+ * sensorDataPackageHandler.c
  *
  * Created: 04/05/2022 21.48.34
  *  Author: Deniss
@@ -11,17 +11,17 @@
 static measurements_t sensordata;
 
 
-void setTemperature(int16_t temp)
+void sensorDataPackage_setTemperature(int16_t temp)
 {
 	sensordata.temperature = temp;
 }
 
-void setHumidity(uint16_t hum)
+void sensorDataPackage_setHumidity(uint16_t hum)
 {
 	sensordata.humidity = hum;
 }
 
-void setCO2(uint16_t co2ppm)
+void sensorDataPackage_setCO2(uint16_t co2ppm)
 {
 	sensordata.co2 = co2ppm;
 }

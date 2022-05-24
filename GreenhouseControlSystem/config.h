@@ -34,3 +34,6 @@
 #define APPLICATION_TASK_STACK						( configMINIMAL_STACK_SIZE + 200 ) 
 #define UPLINK_TASK_STACK							( configMINIMAL_STACK_SIZE + 200 )
 #define DOWNLINK_TASK_STACK 						( configMINIMAL_STACK_SIZE + 200 )
+
+// === Dev envoriment ===
+#define DEV_ENV		( 1 )

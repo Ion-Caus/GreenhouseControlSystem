@@ -174,10 +174,10 @@
     <Compile Include="eventGroupsHandler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.c">
+    <Compile Include="thresholdConfiguration.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.h">
+    <Compile Include="thresholdConfiguration.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="drivers\display_7seg.h">
@@ -228,7 +228,7 @@
     <Compile Include="drivers\twi.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="SensorDataPackageHandler.c">
+    <Compile Include="sensorDataPackageHandler.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sensorDataPackageHandler.h">
@@ -400,7 +400,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="LorawanConfig.h">
+    <Compile Include="lorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

@@ -1,5 +1,5 @@
 /*
- * ThresholdConfiguration.h
+ * thresholdConfiguration.h
  *
  * Created: 18/05/2022 20.01.37
  *  Author: Deniss

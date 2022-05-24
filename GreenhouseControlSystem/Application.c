@@ -65,8 +65,8 @@ void application_task_run()
 	
 	//providing data for the sensor package
 	sensorDataPackage_reset();
-	setTemperature(measuredTemperature);
-	setHumidity(measuredHumidity);
+	sensorDataPackage_setTemperature(measuredTemperature);
+	sensorDataPackage_setHumidity(measuredHumidity);
 	
 	//getting measurements data package
 	measurements_t package = sensorDataPackage_getSensorData();
@@ -77,7 +77,7 @@ void application_task_run()
 		xMessageBufferReset(upLinkBuffer);
 	}
 	
-	//sending the payload to upLink buffer
+	//sending the package to upLink buffer
 	size_t sentBytes = xMessageBufferSend(upLinkBuffer,
 		(void*)&package,
 		sizeof(measurements_t),
@@ -85,11 +85,11 @@ void application_task_run()
 	
 	printf("Sent data package to upLink buffer, sent bytes =%d\n", sentBytes);
 	
-	//sending the payload to upLink buffer
+	//sending the package to window buffer
 	sentBytes = xMessageBufferSend(windowBuffer,
 		(void*)&package,
 		sizeof(measurements_t),
-		portMAX_DELAY);
+		0);								// DELAY SET TO ZERO
 	
 	printf("Sent data package to window buffer, sent bytes =%d\n", sentBytes);
 	

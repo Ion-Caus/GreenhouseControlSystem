@@ -12,5 +12,9 @@
 #include "event_groups.h"
 
 
+/**
+ * Create the Application task
+ */
 void application_task_create(void);
 
+void application_task_run(void); 

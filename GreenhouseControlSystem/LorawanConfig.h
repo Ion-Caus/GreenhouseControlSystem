@@ -1,5 +1,5 @@
 /*
- * GreenhouseConfig.h
+ * loraConfig.h
  *
  * Created: 4/28/2022 8:57:22 AM
  *  Author: lukis, ionc

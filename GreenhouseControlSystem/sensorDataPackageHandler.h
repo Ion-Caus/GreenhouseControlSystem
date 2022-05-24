@@ -19,9 +19,9 @@ typedef struct measurements {
 } measurements_t;
 
 
-void setTemperature(int16_t temp);
-void setHumidity(uint16_t hum);
-void setCO2(uint16_t co2);
+void sensorDataPackage_setTemperature(int16_t temp);
+void sensorDataPackage_setHumidity(uint16_t hum);
+void sensorDataPackage_setCO2(uint16_t co2);
 
 
 /*
