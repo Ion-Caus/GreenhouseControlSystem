@@ -1,31 +1,28 @@
 /*
- * moisture.cpp
+ * moistureTests.cpp
  *
  * Created: 5/18/2022 6:13:02 PM
  *  Author: Lukas
  */
-#pragma once
-
 #include "gtest/gtest.h"
 #include <FreeRTOS_FFF_MocksDeclaration.h>
-//DEFINE_FFF_GLOBALS
 
 extern "C" {
 	#include "moisture.h"
-	#include <FreeRTOS_FFF_MocksDeclaration.h>
+	#include <ATMEGA_FreeRTOS.h>
 	#include <task.h>
 	#include <semphr.h>
-	#include <moisture.c>
 	#include <sen14262.h>
-
 	#include <stdio_driver.h>
+
+	#include "eventGroupsHandler.c"
 }
 
 void sen14262_initialise(void);
 
 FAKE_VOID_FUNC(sen14262_initialise);
-
 FAKE_VALUE_FUNC(uint16_t, sen14262_envelope);
+
 
 class MoistureTest : public ::testing::Test {
 protected:
@@ -33,21 +30,27 @@ protected:
 		RESET_FAKE(sen14262_initialise);
 		RESET_FAKE(sen14262_envelope);
 		RESET_FAKE(xEventGroupWaitBits);
+		RESET_FAKE(xEventGroupSetBits);
+
 	}
 	void TearDown() override {}
 };
 
-TEST_F(MoistureTest, init_moisture) {
-	moisture_create();
-}
 
-TEST_F(MoistureTest, init_call_moisture) {
-	moisture_create();
+TEST_F(MoistureTest, init_moisture_driver) {
+	moisture_initDriver();
 	ASSERT_EQ(sen14262_initialise_fake.call_count, 1);
 }
 
-TEST_F(MoistureTest, get_some_moisture) {
+TEST_F(MoistureTest, get_defalut_array_of_moisture) {
 	uint8_t* moistures = moisture_getMoistures();
+
+	ASSERT_EQ(moistures[0], 55);
+	ASSERT_EQ(moistures[1], 55);
+	ASSERT_EQ(moistures[2], 55);
+	ASSERT_EQ(moistures[3], 55);
+	ASSERT_EQ(moistures[4], 55);
+	ASSERT_EQ(moistures[5], 55);
 }
 
 TEST_F(MoistureTest, get_moisture_call) {
@@ -57,8 +60,6 @@ TEST_F(MoistureTest, get_moisture_call) {
 }
 
 TEST_F(MoistureTest, get_moisture_task) {
-	// set the bit so measurement will take place
-	xEventGroupSetBits(_measureEventGroup, BIT_TASK_MOIST);
 
 	// make the task run
 	moisture_taskRun();
@@ -72,14 +73,12 @@ TEST_F(MoistureTest, get_moisture_task) {
 
 
 	//check if the task give info about finishing
-	//expect this to be 2 because I am calling once and method calls it once
-	ASSERT_EQ(xEventGroupSetBits_fake.call_count, 2);
+	ASSERT_EQ(xEventGroupSetBits_fake.call_count, 1);
 	ASSERT_EQ(xEventGroupSetBits_fake.arg1_val, BIT_TASK_MOIST);
 }
 
 TEST_F(MoistureTest, get_moisture_task_value) {
 	uint8_t myFakeValue = 2;
-	xEventGroupSetBits(_measureEventGroup, BIT_TASK_MOIST);
 
 	sen14262_envelope_fake.return_val = myFakeValue;
 
@@ -98,7 +97,6 @@ TEST_F(MoistureTest, get_moisture_task_value) {
 
 TEST_F(MoistureTest, get_moisture_task_value_all) {
 	uint8_t myFakeValue = 2;
-	xEventGroupSetBits(_measureEventGroup, BIT_TASK_MOIST);
 
 	sen14262_envelope_fake.return_val = myFakeValue;
 

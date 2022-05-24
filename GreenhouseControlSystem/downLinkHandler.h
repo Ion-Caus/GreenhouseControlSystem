@@ -6,11 +6,12 @@
  */ 
 
 
-#ifndef DOWNLINKHANDLER_H_
-#define DOWNLINKHANDLER_H_
+#pragma  once
 
 
-void downLinkHandler_task_init();
+/**
+ * Create the DownlinkHandler task
+ */
+void downLinkHandler_task_create(void);
 
-
-#endif /* DOWNLINKHANDLER_H_ */
+void downLinkHandler_task_run(void);

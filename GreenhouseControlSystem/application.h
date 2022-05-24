@@ -8,20 +8,10 @@
 
 #pragma once
 
-#include "ATMEGA_FreeRTOS.h"
-#include "event_groups.h"
 
+/**
+ * Create the Application task
+ */
+void application_task_create(void);
 
-#define APPLICATION_TASK_STACK		( configMINIMAL_STACK_SIZE )
-#define APPLICATION_TASK_PRIORITY	( tskIDLE_PRIORITY + 2 ) //Make this higher than other tasks
-
-#define BIT_TASK_TEMPHUM (1<<0)
-#define BIT_TASK_CO2 (1<<1)
-#define BIT_TASK_MOIST		(1<<2)
-
-void createApplicationTask(void);
-
-
-EventGroupHandle_t _measureEventGroup;
-EventGroupHandle_t _readingsReadyEventGroup;
-
+void application_task_run(void);

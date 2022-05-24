@@ -13,21 +13,21 @@
 #include <lora_driver.h>
 #include <status_leds.h>
 
-#include "lorawanConfig.h"
-#include "upLinkHandler_LoraWAN.h"
 #include "sensorDataPackageHandler.h"
+#include "upLinkHandler_LoraWAN.h"
+#include "buffersHandler.h"
 
-#include "payloadConfig.h"
-
-#define UPLINKHANDLER_LORA_TASK_DELAY_MS				(300000) // Upload message every 5 minutes (300000 ms)
+#include "lorawanConfig.h"
+#include "config.h"
 
 
 extern MessageBufferHandle_t upLinkBuffer;
 
 static lora_driver_payload_t _uplink_payload;
 
+static TickType_t xLastWakeTime;
+static const TickType_t xFrequency  = pdMS_TO_TICKS(UPLINKHANDLER_LORA_TASK_DELAY_MS);
 
-void upLinkHandler_lora_task( void *pvParameters );
 
 static void _lora_setup(void)
 {
@@ -103,7 +103,7 @@ static void _lora_setup(void)
 	}
 }
 
-void initLoraWAN(void) {
+static void resetLoraWAN(void) {
 	// Hardware reset of LoRaWAN transceiver
 	lora_driver_resetRn2483(1);
 	
@@ -118,68 +118,71 @@ void initLoraWAN(void) {
 
 	_lora_setup();
 
-	_uplink_payload.len = sizeof(measurements_t);
+	_uplink_payload.len = UPLINK_PAYLOAD_LEN;
 	_uplink_payload.portNo = UPLINK_PAYLOAD_PORTNO;
+}
+
+void upLinkHandler_task_run(uint8_t* packageBuffer) 
+{
+	xTaskDelayUntil( &xLastWakeTime, xFrequency );
+	
+	// receiving the data sensor package from the upLink buffer
+	size_t bytesReceived = xMessageBufferReceive(upLinkBuffer,
+			(void*)packageBuffer,
+			sizeof(measurements_t),
+			portMAX_DELAY);
+	
+	puts("Received message from UpLinkBuffer\n");
+	
+	#if DEV_ENV
+		// TODO : delete in production
+		for (uint8_t i = 0; i < bytesReceived; i++) {
+			printf("%d, ", packageBuffer[i]);
+		}
+		printf("\n");
+		// --------------------------
+	#endif
+	
+	// coping the package into the payload
+	for (uint8_t i = 0; i < bytesReceived; i++) {
+		// swapping little endian into big endian
+		uint8_t index = (i % 2 == 0) ? i+1 : i-1;
+		_uplink_payload.bytes[i] = packageBuffer[index];
+	}
+
+	status_leds_shortPuls(led_ST4); 
+	
+	// uploading the upLink payload to LoraWAN
+	lora_driver_returnCode_t uploadStatus = lora_driver_sendUploadMessage(false, &_uplink_payload);
+	
+	printf("Upload Message >%s<\n",
+		lora_driver_mapReturnCodeToText(uploadStatus));
 }
 
 
 /*-----------------------------------------------------------*/
 void upLinkHandler_task( void *pvParameters )
 {
-	// init LoraWAN
-	initLoraWAN();
-	
-	TickType_t xLastWakeTime;
-	
-	const TickType_t xFrequency = pdMS_TO_TICKS(UPLINKHANDLER_LORA_TASK_DELAY_MS); 
+
+	resetLoraWAN(); // Hardware reset of LoRaWAN
+	 
 	xLastWakeTime = xTaskGetTickCount();
 	
-	
-	uint8_t payloadBuffer[sizeof(measurements_t)] = {0};
+	uint8_t packageBuffer[sizeof(measurements_t)] = {0};
 	
 	for(;;)
 	{
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
-		
-		// receiving the payload from the upLink buffer
-		size_t bytesReceived = xMessageBufferReceive(upLinkBuffer,
-			(void*)payloadBuffer,
-			sizeof(measurements_t),
-			portMAX_DELAY);
-		
-		printf("Received message from UpLinkBuffer\n");
-		
-		for (uint8_t i = 0; i < bytesReceived; i++) {
-			printf("%d, ", payloadBuffer[i]);
-		}
-		printf("\n");
-		
-		// no need for bit shift
-		for (uint8_t i = 0; i < bytesReceived; i++) {
-			uint8_t index = (i % 2 == 0) ? i+1 : i-1;
-			_uplink_payload.bytes[i] = payloadBuffer[index]; 
-		}
-		
-		
-
-		status_leds_shortPuls(led_ST4);  // OPTIONAL
-		
-		// sending the upLink payload to Lora
-		lora_driver_returnCode_t uploadStatus = lora_driver_sendUploadMessage(false, &_uplink_payload);
-		
-		printf("Upload Message >%s<\n", 
-				lora_driver_mapReturnCodeToText(uploadStatus)
-				);
+		upLinkHandler_task_run(packageBuffer);	
 	}
 }
 
-void upLinkHandler_task_init(UBaseType_t lora_handler_task_priority)
+void upLinkHandler_task_create()
 {	
 	xTaskCreate(
 	upLinkHandler_task
-	,  "UpLinkHandler_LoraWAN"  // A name just for humans
-	,  configMINIMAL_STACK_SIZE+200  // This stack size can be checked & adjusted by reading the Stack Highwater
+	,  "UpLinkHandler_LoraWAN" 
+	,  UPLINK_TASK_STACK  
 	,  NULL
-	,  lora_handler_task_priority  // Priority, with 3 (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+	,  UPLINK_TASK_PRIORITY
 	,  NULL );
 }

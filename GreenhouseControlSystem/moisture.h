@@ -5,23 +5,37 @@
  *  Author: Lukas
  */ 
 
+#pragma once
+
 #include <stdint.h>
 
-#ifndef MOISTURE_H_
-#define MOISTURE_H_
+#define POT_COUNT					(6)
+#define POT_DELAY_MS				(80)
 
-#define MOIST_TASK_STACK			( configMINIMAL_STACK_SIZE )
-#define MOIST_TASK_PRIORITY			( tskIDLE_PRIORITY + 1 )
+											// lower number means the change is faster and vice versa
+#define CHANGE_SPEED_INVERSE		(40)	// number higher then 200 will make the temperatures not change at all
 
-//these two methods are used outside of this method
-void moisture_create();
-uint8_t* moisture_getMoistures();
+#define TOP_MOISTURE				(70 - 1) // the minus one is for buffer
+#define LOW_MOISTURE				(40 + 1) // the plus one is for buffer
 
-void moisture_createTask(void);
-void moisture_destroy();
 
-//method to be used for testing 
-uint8_t _fake_moisture_measurement(uint8_t previousMeasurement);
+/**
+ * Get an array of size 6, containing moisture samples.
+ * The index of the value in the array is the id of the pod.
+ */
+uint8_t* moisture_getMoistures(void);
+
+/**
+ * Create the TempHum task and init the moisture driver
+ */
+void moisture_task_create(void);
+
+
+// for testing
+void moisture_initDriver(void);
 void moisture_taskRun(void);
 
-#endif /* MOISTURE_H_ */
+/*
+ * Generates a fake measurement based on the previous one.
+ */
+uint8_t _fake_moisture_measurement(uint8_t previousMeasurement);

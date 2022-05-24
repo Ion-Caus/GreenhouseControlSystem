@@ -7,4 +7,11 @@
 
 #pragma once
 
-void upLinkHandler_task_init(UBaseType_t lora_handler_task_priority);
+#include <stdint.h>
+
+/**
+ * Create the UplinkHandler task and hardware reset of LoRaWAN
+ */
+void upLinkHandler_task_create(void);
+
+void upLnkHandler_task_run(uint8_t* packageBuffer);

@@ -147,10 +147,19 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Application.c">
+    <Compile Include="application.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="application.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buffersHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="buffersHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="config.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="downLinkHandler.c">
@@ -159,10 +168,16 @@
     <Compile Include="downLinkHandler.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.c">
+    <Compile Include="eventGroupsHandler.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="ThresholdConfiguration.h">
+    <Compile Include="eventGroupsHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="thresholdConfiguration.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="thresholdConfiguration.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="drivers\display_7seg.h">
@@ -219,10 +234,7 @@
     <Compile Include="moisture.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="payloadConfig.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="SensorDataPackageHandler.c">
+    <Compile Include="sensorDataPackageHandler.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="sensorDataPackageHandler.h">
@@ -394,7 +406,7 @@
     <None Include="FreeRTOS\src\LICENSE.md">
       <SubType>compile</SubType>
     </None>
-    <Compile Include="LorawanConfig.h">
+    <Compile Include="lorawanConfig.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">
