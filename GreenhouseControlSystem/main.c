@@ -22,6 +22,7 @@
 #include "downLinkHandler.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 
 #include "payloadConfig.h"
 
@@ -62,6 +63,7 @@ void initialiseSystem()
 	// Creates tasks
 	createApplicationTask();
 	createTemperatureHumidityTask();
+	moisture_create(); //method to initialize the driver and create task to read from it
 	
 	
 	// ===== BELOW IS LoRaWAN initialisation =====

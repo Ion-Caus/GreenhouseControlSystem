@@ -19,6 +19,7 @@
 #include "event_groups.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 #include "sensorDataPackageHandler.h"
 
 #include "payloadConfig.h"
@@ -52,7 +53,11 @@ void applicationTask(void* pvParameter){
 		//Tells the CO2 sensor to wake up and collect data
 		//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2); 
 		
-		uint8_t bits = BIT_TASK_TEMPHUM; //| BIT_TASK_CO2;
+		//Tells the moisture sensor to start measurements
+		//printf("setting the bit");
+		xEventGroupSetBits(_measureEventGroup, BIT_TASK_MOIST);
+		
+		uint8_t bits = BIT_TASK_TEMPHUM | BIT_TASK_MOIST; //| BIT_TASK_CO2;
 		
 		//wait for the tasks to return with their measurements and set their event group flags							
 		xEventGroupWaitBits(_readingsReadyEventGroup, 
@@ -68,11 +73,20 @@ void applicationTask(void* pvParameter){
 	
 		//getting the calculated temperature from the sensor
 		int16_t measuredTemperature = getTemperature();
-		
-		//getting the calculated temperature from the sensor
+
+		//getting the calculated humidity from the sensor
 		uint16_t measuredHumidity = getHumidity();
 		
-		//providing data for the sensor package
+		//geting moisture of plants (from sound sensor)
+		uint8_t* moistureArr = moisture_getMoistures();
+		
+		//printf("moisture values: ");
+		//for (int i = 0; i < 6; i++) {
+		//	printf("%d, ",moistureArr[i]);
+		//} 
+		//printf("\n");
+
+		//providing data for the sensor package		
 		sensorDataPackage_reset();
 		setTemperature(measuredTemperature);
 		setHumidity(measuredHumidity);

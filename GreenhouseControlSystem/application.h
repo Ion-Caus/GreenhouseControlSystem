@@ -17,6 +17,7 @@
 
 #define BIT_TASK_TEMPHUM (1<<0)
 #define BIT_TASK_CO2 (1<<1)
+#define BIT_TASK_MOIST		(1<<2)
 
 void createApplicationTask(void);
 
