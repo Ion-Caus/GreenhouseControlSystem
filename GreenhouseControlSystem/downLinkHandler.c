@@ -57,11 +57,11 @@ void downLinkHandler_task_run()
 	puts("Updating the Thresholds.\n");
 	
 	// setting up the thresholds 
-	setTempThresholdLower(tempMin);
-	setTempThresholdUpper(tempMax);
+	thresholdMutex_setTempLower(tempMin);
+	thresholdMutex_setTempUpper(tempMax);
 	
-	setCo2ThresholdLower(co2Min);
-	setCo2ThresholdUpper(co2Max);
+	thresholdMutex_setCo2Lower(co2Min);
+	thresholdMutex_setCo2Upper(co2Max);
 	
 }
 

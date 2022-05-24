@@ -11,11 +11,11 @@
 #include <stdint.h>
 
 void thresholdMutex_create();
-int16_t getTemperatureThresholdUpper();
-int16_t getTemperatureThresholdLower();
-uint16_t getCo2ThresholdUpper();
-uint16_t getCo2ThresholdLower();
-void setTempThresholdUpper(int16_t tempThreshold);
-void setTempThresholdLower(int16_t tempThreshold);
-void setCo2ThresholdUpper(uint16_t co2Threshold);
-void setCo2ThresholdLower(uint16_t co2Threshold);
+int16_t thresholdMutex_getTemperatureUpper();
+int16_t thresholdMutex_getTemperatureLower();
+uint16_t thresholdMutex_getCo2Upper();
+uint16_t thresholdMutex_getCo2Lower();
+void thresholdMutex_setTempUpper(int16_t tempThreshold);
+void thresholdMutex_setTempLower(int16_t tempThreshold);
+void thresholdMutex_setCo2Upper(uint16_t co2Threshold);
+void thresholdMutex_setCo2Lower(uint16_t co2Threshold);
