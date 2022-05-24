@@ -6,7 +6,8 @@
  */ 
 
 
-#pragma once
+#ifndef EVENTGROUPSHANDLER_H_
+#define EVENTGROUPSHANDLER_H_
 
 #include "ATMEGA_FreeRTOS.h"
 #include "event_groups.h"
@@ -34,3 +35,5 @@ EventGroupHandle_t readingsReadyEventGroup;
  * Create the measureEventGroup and readingReadyEventGroup.
  */
 void eventGroupsHandler_create(void);
+
+#endif // EVENTGROUPSHANDLER_H_

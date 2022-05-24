@@ -20,6 +20,7 @@
 #include "event_groups.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 #include "sensorDataPackageHandler.h"
 #include "eventGroupsHandler.h"
 #include "buffersHandler.h"
@@ -41,9 +42,12 @@ void application_task_run()
 	xEventGroupSetBits(measureEventGroup, BIT_TASK_TEMPHUM);
 	
 	//Tells the CO2 sensor to wake up and collect data
-	//xEventGroupSetBits(_measureEventGroup, BIT_TASK_CO2);
+	//xEventGroupSetBits(measureEventGroup, BIT_TASK_CO2);
 	
-	uint8_t bits = BIT_TASK_TEMPHUM; //| BIT_TASK_CO2;
+	//Tells the Moisture sensor to wake up and collect data
+	xEventGroupSetBits(measureEventGroup, BIT_TASK_MOIST);
+	
+	uint8_t bits = BIT_TASK_TEMPHUM | BIT_TASK_MOIST; //| BIT_TASK_CO2;
 	
 	//wait for the tasks to return with their measurements and set their event group flags
 	xEventGroupWaitBits(readingsReadyEventGroup,
@@ -105,7 +109,7 @@ void application_task(void* pvParameter)
 	xLastWakeTime = xTaskGetTickCount();
 	 
 	for(;;) {
-		
+		application_task_run();
 	}
 }
 

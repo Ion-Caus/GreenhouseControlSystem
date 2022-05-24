@@ -5,8 +5,8 @@
  *  Author: ionc
  */ 
 
-
-#pragma once
+#ifndef BUFFERSHANDLER_H_
+#define BUFFERSHANDLER_H_
 
 #include "message_buffer.h"
 
@@ -33,3 +33,5 @@ MessageBufferHandle_t downLinkBuffer;
  * Create the buffers: windowBuffer, uplinkBuffer and downlinkBuffer.
  */
 void buffersHandler_create(void);
+
+#endif // BUFFERSHANDLER_H_

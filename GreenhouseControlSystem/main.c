@@ -21,6 +21,7 @@
 #include "downLinkHandler.h"
 #include "application.h"
 #include "temp_hum.h"
+#include "moisture.h"
 
 #include "config.h"
 #include "lorawanConfig.h"
@@ -34,6 +35,23 @@
 
 extern MessageBufferHandle_t downlinkBuffer;
 
+void structures_create() {
+	// created the message buffer for window, upLink and downLink task
+	buffersHandler_create();
+	
+	// creates the event group of the application and sensors tasks
+	eventGroupsHandler_create();
+	
+	// creates the threshold mutex
+	thresholdMutex_create();
+}
+
+void tasks_create() {
+	application_task_create();
+	tempHum_task_create();
+	moisture_task_create();
+}
+
 /*-----------------------------------------------------------*/
 void initialiseSystem()
 {
@@ -43,17 +61,8 @@ void initialiseSystem()
 	// Make it possible to use stdio on COM port 0 (USB) on Arduino board - Setting 57600,8,N,1
 	stdio_initialise(ser_USART0);
 	
-	// Initialize buffers for upLink and downLink Lora handler
-	buffersHandler_create();
-	
-	eventGroupsHandler_create();
-	
-	thresholdMutex_create();
-	
-	// Creates tasks
-	application_task_create();
-	tempHum_task_create();
-	
+	// Create tasks
+	tasks_create();
 	
 	// ===== BELOW IS LoRaWAN initialisation =====
 	// Status LEDs driver

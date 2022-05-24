@@ -15,7 +15,6 @@ extern "C" {
 	#include <semphr.h>
 	#include <hih8120.h>
 	#include <stdio_driver.h>
-	#include "eventGroupsHandler.h"
 }
 
 FAKE_VALUE_FUNC(hih8120_driverReturnCode_t, hih8120_initialise);
@@ -35,7 +34,9 @@ protected:
 		RESET_FAKE(hih8120_measure);
 		RESET_FAKE(hih8120_getTemperature_x10);
 		RESET_FAKE(hih8120_getHumidityPercent_x10);
-		RESET_FAKE(xTaskDelayUntil)
+		RESET_FAKE(xEventGroupWaitBits);
+		RESET_FAKE(xEventGroupSetBits);
+		RESET_FAKE(xTaskDelayUntil);
 	}
 	void TearDown() override {}
 };
