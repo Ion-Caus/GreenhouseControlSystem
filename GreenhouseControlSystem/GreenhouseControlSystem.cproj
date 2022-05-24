@@ -159,6 +159,18 @@
     <Compile Include="co2.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="downLinkHandler.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="downLinkHandler.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ThresholdConfiguration.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ThresholdConfiguration.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="drivers\display_7seg.h">
       <SubType>compile</SubType>
     </Compile>

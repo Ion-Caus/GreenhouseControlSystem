@@ -93,7 +93,7 @@ inline void tempHumTask_run(int16_t* temperatureArray, int16_t* humidityArray, u
 		return;
 	}
 	
-	if (humidity > MAX_HUMIDITY) {
+	if (humidity >= MAX_HUMIDITY) {
 		return; // humidity exceeds the norm
 	}
 	
