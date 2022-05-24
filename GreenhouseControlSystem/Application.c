@@ -26,8 +26,6 @@
 
 #define APPICATION_TASK_DELAY_MS				(300000UL) // same as Lora delay
 
-static uint8_t counter = 0;
-
 
 extern MessageBufferHandle_t upLinkBuffer; 
 
@@ -81,8 +79,8 @@ void applicationTask(void* pvParameter){
 		printf("giving values: ");
 		for (int i = 0; i < 6; i++) {
 			printf("%d, ",moistureArr[i]);
-		}
-		printf("measurement number: %d\n",++counter);
+		} 
+		printf("\n");
 		
 		//providing data for the Lora payload
 		setTemperature(measuredTemperature);
