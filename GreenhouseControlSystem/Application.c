@@ -85,7 +85,8 @@ void applicationTask(void* pvParameter){
 		//	printf("%d, ",moistureArr[i]);
 		//} 
 		//printf("\n");
-		
+
+		//providing data for the sensor package		
 		sensorDataPackage_reset();
 		setTemperature(measuredTemperature);
 		setHumidity(measuredHumidity);
