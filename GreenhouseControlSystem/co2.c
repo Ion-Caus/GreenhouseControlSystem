@@ -7,7 +7,9 @@
 
 #include "co2.h"
 #include "application.h"
+#include "eventGroupsHandler.h"
 #include "weighted_average.h"
+#include "config.h"
 
 #include <ATMEGA_FreeRTOS.h>
 #include <task.h>
@@ -21,33 +23,24 @@
 #include <stdlib.h>
 #include <math.h>
 
-#define CO2_DELAY_MS			( 400 )
-#define CO2_TASK_STACK			( configMINIMAL_STACK_SIZE )
-#define CO2_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
-
-#define MAX_CO2					( 5000 ) // max ppm
-
-#define CO2_ARRAY_SIZE			( 10 )
-
-extern EventGroupHandle_t _measureEventGroup;
-extern EventGroupHandle_t _readingsReadyEventGroup;
-
+extern EventGroupHandle_t measureEventGroup;
+extern EventGroupHandle_t readingsReadyEventGroup;
 
 static uint16_t weightedCo2;
 
 
-uint16_t getCo2() {
+uint16_t co2_getCo2() {
 	return weightedCo2;
 }
 
 // initialize the driver
-void initCo2Driver() {
+void co2_initDriver() {
 	mh_z19_initialise(ser_USART3);
 	puts("Co2 driver initialized!\n");
 }
 
 
-void co2Task(void* pvParameter) {
+void _co2Task(void* pvParameter) {
 	(void) pvParameter;
 
 	TickType_t xLastWakeTime;
@@ -63,7 +56,7 @@ void co2Task(void* pvParameter) {
 	
 	for (;;) {
 		
-			xEventGroupWaitBits(_measureEventGroup,
+			xEventGroupWaitBits(measureEventGroup,
 			BIT_TASK_CO2,
 			pdFALSE, //clear the bit so measurement will happen just after someone request it again
 			pdTRUE,
@@ -82,6 +75,7 @@ void co2Task(void* pvParameter) {
 
 		if((returnCode = mh_z19_getCo2Ppm(&co2)) != MHZ19_OK) {
 			printf("Failed to retrieve the measurement of Co2: %d\n", returnCode);
+			xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(20000));
 			continue;
 		}
 		
@@ -112,19 +106,19 @@ void co2Task(void* pvParameter) {
 			 
 		 
 		 // data ready to take
-		xEventGroupSetBits(_readingsReadyEventGroup, BIT_TASK_CO2);
+		xEventGroupSetBits(readingsReadyEventGroup, BIT_TASK_CO2);
 
 		xTaskDelayUntil(&xLastWakeTime, xFrequency);
 	}
 }
 
 
-void createCo2Task(void) {
+void co2_createTask(void) {
 	
-	initCo2Driver();
+	co2_initDriver();
 	
 	xTaskCreate(
-		co2Task,
+		_co2Task,
 		"Co2 Task",
 		CO2_TASK_STACK,
 		NULL,

@@ -51,6 +51,7 @@ void structures_create() {
 void tasks_create() {
 	application_task_create();
 	tempHum_task_create();
+	co2_createTask();
 	moisture_task_create();
 }
 
@@ -78,6 +79,8 @@ void initialiseSystem()
 	
 	// Create DownLinkTaskHandler 
 	downLinkHandler_task_create();
+	
+	structures_create();
 }
 
 /*-----------------------------------------------------------*/

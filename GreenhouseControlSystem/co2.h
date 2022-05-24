@@ -9,8 +9,12 @@
 
 #include <stdint.h>
 
-uint16_t getCo2();
+#define MAX_CO2					( 5000 ) // max ppm
 
-void initCo2Driver();
-void createCo2Task(void);
+#define CO2_ARRAY_SIZE			( 10 )
+
+uint16_t co2_getCo2();
+
+void co2_initDriver();
+void co2_createTask(void);
 
