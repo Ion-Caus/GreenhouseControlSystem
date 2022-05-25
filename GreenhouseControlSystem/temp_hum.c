@@ -133,6 +133,8 @@ void tempHum_task(void* pvParameter) {
 	 int16_t humidityArray[TEMP_HUM_ARRAY_SIZE];
 	 
 	 uint8_t index = 0; 
+	 
+	 
 	 for (;;)
 	 { 
 		 tempHum_task_run(temperatureArray, humidityArray, &index);
