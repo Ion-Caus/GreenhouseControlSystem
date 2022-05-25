@@ -33,7 +33,7 @@
 
 #include "buffersHandler.h"
 #include "eventGroupsHandler.h"
-
+#include "weighted_average.h"
 
 extern MessageBufferHandle_t downlinkBuffer;
 
@@ -46,6 +46,9 @@ void structures_create() {
 	
 	// creates the threshold mutex
 	thresholdMutex_create();
+	
+	// create the mutex for the weigthedAvg utility function
+	weightedAverage_createMutex();
 }
 
 void tasks_create() {
@@ -67,6 +70,9 @@ void initialiseSystem()
 	// Create tasks
 	tasks_create();
 	
+	// Create buffers and thresholds
+	structures_create();
+	
 	// ===== BELOW IS LoRaWAN initialisation =====
 	// Status LEDs driver
 	status_leds_initialise(LEDS_STATUS_PRIORITY);
@@ -79,20 +85,12 @@ void initialiseSystem()
 	
 	// Create DownLinkTaskHandler 
 	downLinkHandler_task_create();
-	
-	structures_create();
 }
 
 /*-----------------------------------------------------------*/
 int main(void)
 {
 	initialiseSystem(); // Must be done as the very first thing!! 
-	
-	 // mutex for accessing weighted average calculation by different tasks
-	avg_calc_mutex = xSemaphoreCreateMutex();
-	if((avg_calc_mutex)!=NULL){
-		xSemaphoreGive((avg_calc_mutex));
-	}		
 
 	puts("Program Started!!\n");
 	vTaskStartScheduler(); // Initialize and run the freeRTOS scheduler. Execution should never return from here.
