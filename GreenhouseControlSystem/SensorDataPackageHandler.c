@@ -26,6 +26,14 @@ void sensorDataPackage_setCO2(uint16_t co2ppm)
 	sensordata.co2 = co2ppm;
 }
 
+void sensorDataPackage_setMoistures(uint8_t* moistures){
+	
+	for(int i = 0; i < POT_COUNT; i++){
+		sensordata.moistures[i] = moistures[i];
+	}
+	
+}
+
 measurements_t sensorDataPackage_getSensorData()
 {
 	return sensordata;

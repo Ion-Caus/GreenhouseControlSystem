@@ -59,7 +59,7 @@ void application_task_run()
 		);
 	
 	
-	//once the measure task are ready pause them
+	//once the measure tasks are ready pause them
 	xEventGroupClearBits(measureEventGroup, bits);
 	
 	//getting the calculated temperature from the sensor
@@ -68,15 +68,26 @@ void application_task_run()
 	//getting the calculated temperature from the sensor
 	uint16_t measuredHumidity = tempHum_getHumidity();
 	
+	//getting moisture array from sensor
+	uint8_t* measuredMoisture = moisture_getMoistures();
+	
 	//getting co2 from sensor
 	uint16_t measuredCo2 = co2_getCo2();
-	printf("co2:%d",measuredCo2);
+	
+	//printf("co2:%d",measuredCo2);
 	
 	//providing data for the sensor package
 	sensorDataPackage_reset();
 	sensorDataPackage_setTemperature(measuredTemperature);
 	sensorDataPackage_setHumidity(measuredHumidity);
 	sensorDataPackage_setCO2(measuredCo2);
+	sensorDataPackage_setMoistures(measuredMoisture);
+	
+	//printf("moisture values: ");
+	//for (int i = 0; i < 6; i++) {
+		//printf("%d, ",measuredMoisture[i]);
+	//}
+	//printf("\n");
 	
 	//getting measurements data package
 	measurements_t package = sensorDataPackage_getSensorData();
