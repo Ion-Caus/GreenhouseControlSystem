@@ -48,7 +48,7 @@ TEST_F(TempHumTest, calculte_weighted_average_tempHum) {
 	int16_t samples[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 231 };
 
 	// Act
-	int16_t weightedAverage = calculateWeightedAverage(samples, 10);
+	int16_t weightedAverage = weightedAverage_calculate(samples, 10);
 
 	// Assert
 	ASSERT_EQ(weightedAverage, 237); // 23.7 

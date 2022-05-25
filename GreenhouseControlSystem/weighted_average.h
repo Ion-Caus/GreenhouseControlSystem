@@ -12,6 +12,16 @@
 #include <stdint.h>
 #include <semphr.h>
 
+
 SemaphoreHandle_t avg_calc_mutex;
 
-int16_t calculateWeightedAverage(int16_t array[], uint8_t size);
+/**
+ * Create the semaphore mutex, so 
+ * that only one task is using it
+ */
+void weightedAverage_createMutex(void);
+
+/**
+ * Calculates the weighted average for an array of measurements 
+ */
+int16_t weightedAverage_calculate(int16_t array[], uint8_t size);
