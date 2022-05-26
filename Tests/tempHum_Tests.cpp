@@ -43,7 +43,7 @@ protected:
 };
 
 
-TEST_F(TempHumTest, calculte_weighted_average_tempHum) {
+TEST_F(TempHumTest, calculate_weighted_average_tempHum) {
 	// Arrange
 	int16_t samples[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 231 };
 
