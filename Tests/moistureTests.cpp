@@ -14,8 +14,7 @@ extern "C" {
 	#include <semphr.h>
 	#include <sen14262.h>
 	#include <stdio_driver.h>
-
-	#include "eventGroupsHandler.c"
+	#include "eventGroupsHandler.h"
 }
 
 void sen14262_initialise(void);

@@ -17,7 +17,6 @@
 
 #include <stdio_driver.h>
 
-#include "event_groups.h"
 #include "application.h"
 #include "temp_hum.h"
 #include "moisture.h"
@@ -25,7 +24,6 @@
 #include "eventGroupsHandler.h"
 #include "buffersHandler.h"
 #include "co2.h"
-
 #include "config.h"
 
 extern EventGroupHandle_t measureEventGroup;
@@ -57,7 +55,6 @@ void application_task_run()
 		pdTRUE,
 		portMAX_DELAY
 		);
-	
 	
 	//once the measure tasks are ready pause them
 	xEventGroupClearBits(measureEventGroup, bits);

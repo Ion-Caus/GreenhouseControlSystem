@@ -79,7 +79,6 @@ void _co2Task(void* pvParameter) {
 			continue;
 		}
 		
-		
 		if (co2 > MAX_CO2) {
 			continue; // if co2 exceeds the norm
 		}
