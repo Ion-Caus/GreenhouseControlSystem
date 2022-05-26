@@ -46,7 +46,7 @@ void application_task_run()
 	//Tells the Moisture sensor to wake up and collect data
 	xEventGroupSetBits(measureEventGroup, BIT_TASK_MOIST);
 	
-	uint8_t bits = BIT_TASK_TEMPHUM | BIT_TASK_MOIST | BIT_TASK_CO2;
+	uint8_t bits = BIT_TASK_TEMPHUM | BIT_TASK_CO2; //| BIT_TASK_MOIST 
 	
 	//wait for the tasks to return with their measurements and set their event group flags
 	xEventGroupWaitBits(readingsReadyEventGroup,
@@ -92,7 +92,7 @@ void application_task_run()
 		(void*)&package,
 		sizeof(measurements_t),
 		portMAX_DELAY);
-	
+
 	printf("Sent data package to upLink buffer, sent bytes =%d\n", sentBytes);
 	
 	//sending the package to window buffer

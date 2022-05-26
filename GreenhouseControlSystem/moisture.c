@@ -27,11 +27,11 @@ extern EventGroupHandle_t measureEventGroup;
 extern EventGroupHandle_t readingsReadyEventGroup;
 
 
-static uint8_t potsHumidity[POT_COUNT] = {55, 55, 55 ,55 ,55, 55}; // init values that we want to have
+static uint8_t potsMoisture[POT_COUNT] = {55, 55, 55 ,55 ,55, 55}; // init values that we want to have
 
 
 uint8_t* moisture_getMoistures(){
-	return potsHumidity;
+	return potsMoisture;
 }
 
 uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
@@ -69,12 +69,19 @@ void moisture_taskRun() {
 		//make the task wait some time so there will be differences between different faked measurements
 		vTaskDelay(pdMS_TO_TICKS(POT_DELAY_MS));
 		
-		tempArr[i] =  _fake_moisture_measurement(potsHumidity[i]); //the measurements made quite big difference so I divided it by 8
+		tempArr[i] =  _fake_moisture_measurement(potsMoisture[i]); //the measurements made quite big difference so I divided it by 8
 	}
 	
 	for (uint8_t i = 0; i < POT_COUNT; i++) {
-		potsHumidity[i] = tempArr[i];
+		potsMoisture[i] = tempArr[i];
 	}
+	
+	#if DEV_ENV
+		for (uint8_t i = 0; i < POT_COUNT; i++) {
+			printf("%d, ", potsMoisture[i]);
+		}
+		printf("\n");
+	#endif
 
 	xEventGroupSetBits(readingsReadyEventGroup, BIT_TASK_MOIST);
 	

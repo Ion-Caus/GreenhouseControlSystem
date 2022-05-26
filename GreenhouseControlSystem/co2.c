@@ -124,7 +124,7 @@ void co2_initDriver() {
 }
 
 
-void co2_createTask(void) {
+void co2_task_create(void) {
 	
 	co2_initDriver();
 	

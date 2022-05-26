@@ -4,8 +4,19 @@
  * Created: 22/05/2022 13.37.20
  *  Author: alex
  */ 
-
 #pragma once
 
-void initServoDriver();
-void createWindowTask(void);
+#include "sensorDataPackageHandler.h"
+
+#define SERVO_NO  ( 0 ) // servo J14
+
+
+/**
+ * Create the Window task and init the servo driver
+ */
+void window_task_create(void);
+
+
+// for testing
+void window_initDriver();
+void window_task_run(measurements_t receivedData, int8_t* percent);
