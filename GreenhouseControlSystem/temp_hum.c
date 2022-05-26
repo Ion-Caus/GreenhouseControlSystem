@@ -99,7 +99,7 @@ void tempHum_task_run(int16_t* temperatureArray, int16_t* humidityArray, uint8_t
 	
 	// arrays must be full before calculating the weighted average
 	if (++(*index) < TEMP_HUM_ARRAY_SIZE) {
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, 200 );
 		return;
 	}
 	

@@ -18,7 +18,6 @@ typedef struct measurements {
 	uint16_t humidity;
 	uint16_t co2;
 	uint8_t moistures[POT_COUNT];
-	uint8_t status;
 } measurements_t;
 
 

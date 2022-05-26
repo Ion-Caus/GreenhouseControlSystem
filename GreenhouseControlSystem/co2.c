@@ -50,7 +50,9 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	mh_z19_returnCode_t returnCode;
 	if ((returnCode = mh_z19_takeMeassuring()) != MHZ19_OK)
 	{
-		printf("Co2 driver failed to take the measurement: %d\n", returnCode);
+		#if DEV_ENV
+			printf("Co2 driver failed to take the measurement: %d\n", returnCode);
+		#endif
 		return;
 	}
 
@@ -60,7 +62,9 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	
 	if( (returnCode = mh_z19_getCo2Ppm(&co2)) != MHZ19_OK )
 	{
-		printf("Failed to retrieve the measurement of Co2: %d\n", returnCode);
+		#if DEV_ENV
+			printf("Failed to retrieve the measurement of Co2: %d\n", returnCode);
+		#endif
 		xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(20000));
 		return;
 	}
@@ -79,7 +83,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	
 	// fill the array to be able to calculate the weighted average
 	if (++(*index) < CO2_ARRAY_SIZE) {
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, 200 );
 		return;
 	}
 	

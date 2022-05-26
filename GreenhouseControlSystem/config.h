@@ -13,9 +13,9 @@
 #define MAX_RETRIES					(5)
 
 // === Task delay ===
-#define TEMP_HUM_DELAY_MS								(200)
-#define MOISTURE_DELAY_MS								(500)
-#define CO2_DELAY_MS									( 400 )
+#define TEMP_HUM_DELAY_MS								(30000UL)
+#define MOISTURE_DELAY_MS								(30000UL)
+#define CO2_DELAY_MS									(30000UL)
 #define APPICATION_TASK_DELAY_MS						(1 * 60000UL)
 #define UPLINKHANDLER_LORA_TASK_DELAY_MS				(5 * 60000UL)	// Upload message every 5 minutes (5 * 1min)
 #define DOWNLINK_HANDLER_TASK_DELAY_MS					(5 * 60000UL)	
