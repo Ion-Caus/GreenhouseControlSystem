@@ -15,7 +15,6 @@ extern "C"
 #include "sensorDataPackageHandler.h"
 }
 
-FAKE_VALUE_FUNC(int16_t, tempHum_getTemperature);
 
 class ApplicationTest : public ::testing::Test {
 protected:
