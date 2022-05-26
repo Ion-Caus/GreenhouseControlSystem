@@ -108,10 +108,10 @@ void tempHum_task_run(int16_t* temperatureArray, int16_t* humidityArray, uint8_t
 	
 	
 	// calculation of weighted averages
-	weightedTemperature = calculateWeightedAverage(temperatureArray, TEMP_HUM_ARRAY_SIZE);
+	weightedTemperature = weightedAverage_calculate(temperatureArray, TEMP_HUM_ARRAY_SIZE);
 	printf("Weighted average temperature: %d\n", weightedTemperature);
 	
-	weightedHumidity = calculateWeightedAverage(humidityArray, TEMP_HUM_ARRAY_SIZE);
+	weightedHumidity = weightedAverage_calculate(humidityArray, TEMP_HUM_ARRAY_SIZE);
 	printf("Weighted average humidity: %d\n", weightedHumidity);
 	
 	
