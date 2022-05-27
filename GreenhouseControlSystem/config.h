@@ -16,10 +16,11 @@
 #define TEMP_HUM_DELAY_MS								(30000UL) //0.5 min
 #define MOISTURE_DELAY_MS								(30000UL)
 #define CO2_DELAY_MS									(30000UL)
+#define WINDOW_DELAY_MS									(30000UL)
 #define APPICATION_TASK_DELAY_MS						(1 * 60000UL)
 #define UPLINKHANDLER_LORA_TASK_DELAY_MS				(5 * 60000UL)	// Upload message every 5 minutes (5 * 1min)
 #define DOWNLINK_HANDLER_TASK_DELAY_MS					(5 * 60000UL)	
-#define WINDOW_DELAY_MS									(30000UL)
+
 
 // === Priority ===
 #define TEMP_HUM_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )

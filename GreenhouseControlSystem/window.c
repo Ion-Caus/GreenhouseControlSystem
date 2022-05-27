@@ -49,9 +49,9 @@ void window_task_run(measurements_t receivedData, int8_t* percent)
 		isOpen = false;
 	}
 	
-	if (receivedData.co2 > thresholdMutex_getCo2Upper() && receivedData.temperature >= thresholdMutex_getCo2Lower() && !isOpen)
+	if (receivedData.co2 > thresholdMutex_getCo2Upper() && receivedData.temperature >= thresholdMutex_getTemperatureLower() && !isOpen)
 	{
-		*percent += 100; // open window - too much co2
+		*percent += 50; // open window - too much co2
 		isOpen = true;
 	}
 	
