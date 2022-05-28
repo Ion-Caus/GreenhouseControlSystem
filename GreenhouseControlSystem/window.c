@@ -9,9 +9,9 @@
 #include <lora_driver.h>
 #include <rc_servo.h>
 #include <stdio.h>
-#include <stdbool.h>
 
 #include "window.h"
+#include "temp_hum.h"
 #include "sensorDataPackageHandler.h"
 #include "thresholdConfiguration.h"
 #include "buffersHandler.h"
@@ -23,7 +23,19 @@ extern MessageBufferHandle_t windowBuffer;
 static TickType_t xLastWakeTime;
 static const TickType_t xFrequency = pdMS_TO_TICKS(WINDOW_DELAY_MS);
 
-static bool isOpen = false;
+//--------------------------------------------------------------------------------------------
+//static const int16_t windowSafetyMargin = 50;
+//
+//int16_t getMidTemperatureThreshold() {
+	//int16_t mid_temp = ceil((thresholdMutex_getTemperatureUpper() + thresholdMutex_getTemperatureLower()) / 2);
+	//return mid_temp;
+//}
+
+//uint16_t getMidCo2Threshold() {
+	//uint16_t mid_co2 = (thresholdMutex_getCo2Upper() + thresholdMutex_getCo2Lower()) / 2;
+	//return mid_co2;
+//}
+//--------------------------------------------------------------------------------------------
 
 void window_task_run(measurements_t receivedData, int8_t* percent) 
 {
@@ -34,33 +46,36 @@ void window_task_run(measurements_t receivedData, int8_t* percent)
 	sizeof(measurements_t),
 	portMAX_DELAY);
 	
-	printf("Received message from window buffer\n");
 	
-	// servo is going to act only on temperature and co2 levels, where temperature is of a higher priority
-	if (receivedData.temperature > thresholdMutex_getTemperatureUpper() && !isOpen)
-	{
-		*percent += 100; // open window - too hot
-		isOpen = true;
+		printf("Received message from window buffer\n");
+
+	if (thresholdMutex_getTemperatureUpper() >= MAX_TEMPERATUE && thresholdMutex_getTemperatureLower() <= MIN_TEMPERATURE) {
+
+		// servo is going to act only on temperature and co2 levels, where temperature is of a higher priority
+		if (receivedData.temperature < MAX_TEMPERATUE) {
+			*percent = 0; // open window halfway - temp is rising
+		}
+		//===============================================================================================================================================
+		else if (receivedData.temperature >= MAX_TEMPERATUE) {
+			*percent = 100; // open window fully - too hot
+		}
+	}
+
+	else {
+
+		if (receivedData.temperature <= thresholdMutex_getTemperatureLower()) {
+			*percent = 0; // close window fully - too cold
+		}
+		//===============================================================================================================================================
+		else if (receivedData.temperature > thresholdMutex_getTemperatureLower() && receivedData.temperature < thresholdMutex_getTemperatureUpper()) {
+			*percent = 50; // open window halfway - temp is rising
+		}
+		//===============================================================================================================================================
+		else if (receivedData.temperature >= thresholdMutex_getTemperatureUpper()) {
+			*percent = 100; // open window fully - too hot
+		}
 	}
 	
-	if (receivedData.temperature < thresholdMutex_getTemperatureLower() && isOpen)
-	{
-		*percent = 0; // close window - too cold
-		isOpen = false;
-	}
-	
-	if (receivedData.co2 > thresholdMutex_getCo2Upper() && receivedData.temperature >= thresholdMutex_getTemperatureLower() && !isOpen)
-	{
-		*percent += 50; // open window - too much co2
-		isOpen = true;
-	}
-	
-	if ((receivedData.temperature >= thresholdMutex_getTemperatureLower() && receivedData.temperature <= thresholdMutex_getTemperatureUpper())
-			&& (receivedData.co2 >= thresholdMutex_getCo2Lower() && receivedData.co2 <= thresholdMutex_getCo2Upper()) && isOpen)
-	{
-		*percent = 0; // close window - conditions are good
-		isOpen = false;
-	}
 	
 	rc_servo_setPosition(SERVO_NO, *percent);
 	
