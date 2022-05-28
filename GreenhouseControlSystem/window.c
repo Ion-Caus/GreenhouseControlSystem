@@ -23,19 +23,6 @@ extern MessageBufferHandle_t windowBuffer;
 static TickType_t xLastWakeTime;
 static const TickType_t xFrequency = pdMS_TO_TICKS(WINDOW_DELAY_MS);
 
-//--------------------------------------------------------------------------------------------
-//static const int16_t windowSafetyMargin = 50;
-//
-//int16_t getMidTemperatureThreshold() {
-	//int16_t mid_temp = ceil((thresholdMutex_getTemperatureUpper() + thresholdMutex_getTemperatureLower()) / 2);
-	//return mid_temp;
-//}
-
-//uint16_t getMidCo2Threshold() {
-	//uint16_t mid_co2 = (thresholdMutex_getCo2Upper() + thresholdMutex_getCo2Lower()) / 2;
-	//return mid_co2;
-//}
-//--------------------------------------------------------------------------------------------
 
 void window_task_run(measurements_t receivedData, int8_t* percent) 
 {
@@ -46,9 +33,9 @@ void window_task_run(measurements_t receivedData, int8_t* percent)
 	sizeof(measurements_t),
 	portMAX_DELAY);
 	
+	printf("Received message from window buffer\n");
 	
-		printf("Received message from window buffer\n");
-
+	// before threshold values are received, numbers are just maximum of int16_t
 	if (thresholdMutex_getTemperatureUpper() >= MAX_TEMPERATUE && thresholdMutex_getTemperatureLower() <= MIN_TEMPERATURE) {
 
 		// servo is going to act only on temperature and co2 levels, where temperature is of a higher priority
