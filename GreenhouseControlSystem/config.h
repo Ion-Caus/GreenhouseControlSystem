@@ -31,12 +31,6 @@
 #define DOWNLINK_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
 #define LEDS_STATUS_PRIORITY		( tskIDLE_PRIORITY + 5 )
 
-
-
-
-
-
-
 // === Task stack size ===
 #define TEMP_HUM_TASK_STACK							( configMINIMAL_STACK_SIZE )
 #define MOIST_TASK_STACK							( configMINIMAL_STACK_SIZE )

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MIN_TEMPERATURE				(-20 * 10)
 #define MAX_TEMPERATUE				(60  * 10)
@@ -31,6 +32,9 @@ void tempHum_task_create(void);
  * Create the TempHum task and init the hih8120 driver
  */
 void tempHum_driver_destroy(void);
+
+bool tempHum_getStatusTemperature();
+bool tempHum_getStatusHumidity();
 
 // for testing
 void tempHum_initDriver();

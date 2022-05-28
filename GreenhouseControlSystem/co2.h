@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define MAX_CO2					( 5000 ) // max ppm
 
@@ -17,4 +18,5 @@ uint16_t co2_getCo2();
 
 void co2_initDriver();
 void co2_createTask(void);
+bool co2_getStatus();
 
