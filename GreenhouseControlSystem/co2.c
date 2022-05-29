@@ -26,6 +26,7 @@
 extern EventGroupHandle_t measureEventGroup;
 extern EventGroupHandle_t readingsReadyEventGroup;
 
+
 static uint16_t weightedCo2;
 static bool isWorking;
 
@@ -37,7 +38,7 @@ uint16_t co2_getCo2() {
 	return weightedCo2;
 }
 
-static inline void co2_wakeupAndMeasure(uint16_t co2)
+static inline void co2_wakeupAndMeasure(uint16_t* co2)
 {
 	xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(50));
 	
@@ -53,7 +54,7 @@ static inline void co2_wakeupAndMeasure(uint16_t co2)
 
 	xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(100));
 
-	if( (returnCode = mh_z19_getCo2Ppm(&co2)) != MHZ19_OK )
+	if( (returnCode = mh_z19_getCo2Ppm(co2)) != MHZ19_OK )
 	{
 		#if DEV_ENV
 			printf("Failed to retrieve the measurement of Co2: %d\n", returnCode);
@@ -76,7 +77,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	
 	uint16_t co2 = 0;
 	
-	co2_wakeupAndMeasure(co2);
+	co2_wakeupAndMeasure(&co2);
 	
 	if (co2 > MAX_CO2) 
 	{
