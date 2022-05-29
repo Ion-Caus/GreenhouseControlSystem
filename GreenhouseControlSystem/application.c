@@ -60,7 +60,7 @@ void application_task_run()
 	xEventGroupClearBits(measureEventGroup, bits);
 	
 	//getting the calculated temperature from the sensor
-	char status = 0;
+	uint8_t status = 0;
 	if(tempHum_getStatusTemperature()) status |= TEMP_STATUS;
 	int16_t measuredTemperature = tempHum_getTemperature();
 		

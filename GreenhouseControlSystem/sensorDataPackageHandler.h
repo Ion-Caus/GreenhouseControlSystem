@@ -23,7 +23,7 @@ typedef struct measurements {
 	uint16_t humidity;
 	uint16_t co2;
 	uint8_t moistures[POT_COUNT];
-	char status;
+	uint8_t status;
 	// 1111 - GOOD
 	// 1110 - Temp failed
 	// 1101 - Hum failed
@@ -36,7 +36,7 @@ void sensorDataPackage_setTemperature(int16_t temp);
 void sensorDataPackage_setHumidity(uint16_t hum);
 void sensorDataPackage_setCO2(uint16_t co2);
 void sensorDataPackage_setMoistures(uint8_t* moistures);
-void sensorDataPackage_setStatus(char status);
+void sensorDataPackage_setStatus(uint8_t status);
 
 
 /*
