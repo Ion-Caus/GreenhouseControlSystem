@@ -34,6 +34,10 @@ void sensorDataPackage_setMoistures(uint8_t* moistures){
 	
 }
 
+void sensorDataPackage_setStatus(uint8_t status){
+	sensordata.status = status;
+}
+
 measurements_t sensorDataPackage_getSensorData()
 {
 	return sensordata;
@@ -45,4 +49,5 @@ void sensorDataPackage_reset()
 	sensordata.humidity = 0;
 	sensordata.co2 = 0;
 	*sensordata.moistures = 0;
+	sensordata.status = 0;
 }

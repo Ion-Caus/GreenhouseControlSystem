@@ -63,7 +63,7 @@ void moisture_taskRun() {
 		portMAX_DELAY
 	);
 	
-	uint8_t	tempArr[POT_COUNT];
+	uint8_t	tempArr[POT_COUNT] = {0};
 
 	for (uint8_t i = 0; i < POT_COUNT; i++) {
 		
@@ -89,6 +89,10 @@ void moisture_taskRun() {
 	vTaskDelay(pdMS_TO_TICKS(MOISTURE_DELAY_MS));
 }
 
+
+bool moisture_getStatus(){
+	return true;
+}
 
 void moisture_initDriver() {
 	sen14262_initialise();

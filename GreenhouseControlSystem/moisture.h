@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 /**
  * Get an array of size 6, containing moisture samples.
@@ -20,6 +21,7 @@ uint8_t* moisture_getMoistures(void);
  */
 void moisture_task_create(void);
 
+bool moisture_getStatus();
 
 // for testing
 void moisture_initDriver(void);
