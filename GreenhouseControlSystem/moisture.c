@@ -21,6 +21,7 @@
 
 #include "eventGroupsHandler.h"
 #include "config.h"
+#include "sensorConfig.h"
 
 
 extern EventGroupHandle_t measureEventGroup;

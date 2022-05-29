@@ -9,8 +9,8 @@
 #pragma once
 
 #include <stdint.h>
-#include "moisture.h"
 #include "lora_driver.h"
+#include "sensorConfig.h"
 
 
 typedef struct measurements {

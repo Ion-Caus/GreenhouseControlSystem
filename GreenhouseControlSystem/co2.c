@@ -10,6 +10,7 @@
 #include "eventGroupsHandler.h"
 #include "weighted_average.h"
 #include "config.h"
+#include "sensorConfig.h"
 
 #include <ATMEGA_FreeRTOS.h>
 #include <task.h>

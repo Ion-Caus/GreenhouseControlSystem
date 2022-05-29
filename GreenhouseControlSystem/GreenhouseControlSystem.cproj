@@ -180,6 +180,9 @@
     <Compile Include="eventGroupsHandler.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sensorConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="thresholdConfiguration.c">
       <SubType>compile</SubType>
     </Compile>

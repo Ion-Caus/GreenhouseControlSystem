@@ -10,11 +10,6 @@
 #include <stdint.h>
 
 
-#define MAX_CO2					( 5000 ) // max ppm
-
-#define CO2_ARRAY_SIZE			( 10 )
-
-
 /**
  * Get the weighted average of the co2 in ppm.
  */
