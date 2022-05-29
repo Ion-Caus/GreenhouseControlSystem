@@ -62,7 +62,7 @@ void moisture_taskRun() {
 		portMAX_DELAY
 	);
 	
-	uint8_t	tempArr[POT_COUNT];
+	uint8_t	tempArr[POT_COUNT] = {0};
 
 	for (uint8_t i = 0; i < POT_COUNT; i++) {
 		

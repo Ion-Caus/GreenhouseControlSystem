@@ -46,3 +46,5 @@ void vTaskGetInfo(TaskHandle_t xTask,
     BaseType_t xGetFreeStackSpace,
     eTaskState eState);
 #define tskIDLE_PRIORITY 50
+
+int taskYIELD();
