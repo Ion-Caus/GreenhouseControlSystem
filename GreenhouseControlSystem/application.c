@@ -53,7 +53,7 @@ void application_task_run()
 		bits,
 		pdTRUE,
 		pdTRUE,
-		portMAX_DELAY // --> change to some other delay 
+		APPICATION_TASK_DELAY_MS
 		);
 	
 	//once the measure tasks are ready pause them
@@ -82,6 +82,7 @@ void application_task_run()
 	sensorDataPackage_setHumidity(measuredHumidity);
 	sensorDataPackage_setCO2(measuredCo2);
 	sensorDataPackage_setMoistures(measuredMoisture);
+	sensorDataPackage_setStatus(status);
 	
 	//getting measurements data package
 	measurements_t package = sensorDataPackage_getSensorData();
