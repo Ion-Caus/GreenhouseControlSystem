@@ -8,6 +8,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #define POT_COUNT					(6)
 #define POT_DELAY_MS				(80)
@@ -30,6 +31,7 @@ uint8_t* moisture_getMoistures(void);
  */
 void moisture_task_create(void);
 
+bool moisture_getStatus();
 
 // for testing
 void moisture_initDriver(void);

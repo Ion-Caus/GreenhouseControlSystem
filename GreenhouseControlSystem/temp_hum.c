@@ -27,6 +27,7 @@ extern EventGroupHandle_t readingsReadyEventGroup;
 
 static int16_t weightedTemperature;
 static uint16_t weightedHumidity;
+static bool isWorking;
 
 static TickType_t xLastWakeTime;
 static const TickType_t xFrequency = TEMP_HUM_DELAY_MS/portTICK_PERIOD_MS;
@@ -46,6 +47,7 @@ static inline void tempHum_wakeupAndMeasure() {
 	hih8120_driverReturnCode_t returnCode;
 	if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
 		printf("Temperature/humidity driver failed to wake up, %d\n", returnCode);
+		isWorking = false;
 		return;
 	}
 
@@ -53,9 +55,11 @@ static inline void tempHum_wakeupAndMeasure() {
 
 	if (HIH8120_OK != (returnCode = hih8120_measure())) {
 		printf("Temperature/humidity driver failed to measure, %d\n", returnCode);
+		isWorking = false;
 		return;
 	}
-
+	
+	isWorking = true;
 	xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(10));
 }
 
@@ -170,6 +174,14 @@ void tempHum_task_create(void) {
 
 }
 
+
+bool tempHum_getStatusTemperature() {
+	return isWorking;
+}
+
+bool tempHum_getStatusHumidity() {
+	return isWorking;
+}
  
 void tempHum_driver_destroy() {
 	//hih8120_destroy();

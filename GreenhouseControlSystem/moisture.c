@@ -82,6 +82,10 @@ void moisture_taskRun() {
 }
 
 
+bool moisture_getStatus(){
+	return true;
+}
+
 void moisture_initDriver() {
 	sen14262_initialise();
 	puts("Moisture driver initialized.\n");
