@@ -94,7 +94,7 @@ static size_t uplinkMessageBufferReceive(MessageBufferHandle_t arg0, void* arg1,
 	}
 
 	arg1 = pos;
-	return len + 2;
+	return len;
 }
 
 
@@ -108,7 +108,19 @@ TEST_F(UplinkTest, uplinkHandler_run_swap_endian_test) {
 	upLinkHandler_task_run(packageBuffer);
 
 	// Assert
-
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[0], 0);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[1], 245); // swapped to big endian
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[2], 2);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[3], 243); // swapped to big endian
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[4], 4);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[5], 76); // swapped to big endian
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[6], 56); 
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[7], 57);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[8], 55);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[9], 56);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[10], 57);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[11], 59);
+	ASSERT_EQ(lora_driver_sendUploadMessage_fake.arg1_val->bytes[12], 15);
 }
 
 

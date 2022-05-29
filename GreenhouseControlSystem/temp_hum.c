@@ -27,6 +27,7 @@ extern EventGroupHandle_t readingsReadyEventGroup;
 
 static int16_t weightedTemperature;
 static uint16_t weightedHumidity;
+static bool isWorking;
 
 static TickType_t xLastWakeTime;
 static const TickType_t xFrequency = TEMP_HUM_DELAY_MS/portTICK_PERIOD_MS;
@@ -46,6 +47,7 @@ static inline void tempHum_wakeupAndMeasure() {
 	hih8120_driverReturnCode_t returnCode;
 	if (HIH8120_OK != (returnCode = hih8120_wakeup())) {
 		printf("Temperature/humidity driver failed to wake up, %d\n", returnCode);
+		isWorking = false;
 		return;
 	}
 
@@ -53,9 +55,11 @@ static inline void tempHum_wakeupAndMeasure() {
 
 	if (HIH8120_OK != (returnCode = hih8120_measure())) {
 		printf("Temperature/humidity driver failed to measure, %d\n", returnCode);
+		isWorking = false;
 		return;
 	}
-
+	
+	isWorking = true;
 	xTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(10));
 }
 
@@ -99,7 +103,7 @@ void tempHum_task_run(int16_t* temperatureArray, int16_t* humidityArray, uint8_t
 	
 	// arrays must be full before calculating the weighted average
 	if (++(*index) < TEMP_HUM_ARRAY_SIZE) {
-		xTaskDelayUntil( &xLastWakeTime, xFrequency );
+		xTaskDelayUntil( &xLastWakeTime, 200 );
 		return;
 	}
 	
@@ -133,6 +137,8 @@ void tempHum_task(void* pvParameter) {
 	 int16_t humidityArray[TEMP_HUM_ARRAY_SIZE];
 	 
 	 uint8_t index = 0; 
+	 
+	 
 	 for (;;)
 	 { 
 		 tempHum_task_run(temperatureArray, humidityArray, &index);
@@ -168,6 +174,14 @@ void tempHum_task_create(void) {
 
 }
 
+
+bool tempHum_getStatusTemperature() {
+	return isWorking;
+}
+
+bool tempHum_getStatusHumidity() {
+	return isWorking;
+}
  
 void tempHum_driver_destroy() {
 	//hih8120_destroy();

@@ -19,7 +19,7 @@ static SemaphoreHandle_t lock;
 
 void thresholdMutex_create(){
 	lock = xSemaphoreCreateMutex();	
-	temperatureThresholdLower = SHRT_MIN;
+	temperatureThresholdLower = 0;
 	temperatureThresholdUpper = SHRT_MAX;
 	CO2ThresholdLower = 0;
 	CO2ThresholdUpper = USHRT_MAX;
