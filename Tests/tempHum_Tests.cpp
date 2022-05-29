@@ -99,3 +99,70 @@ TEST_F(TempHumTest, temperature_unsuccesfull_init) {
 	tempHum_initDriver();
 	ASSERT_EQ(hih8120_initialise_fake.call_count, 5);
 }
+
+TEST_F(TempHumTest, tempHum_status_OK) {
+	//Arrange
+	hih8120_wakeup_fake.return_val = HIH8120_OK;
+	hih8120_measure_fake.return_val = HIH8120_OK;
+
+	hih8120_getTemperature_x10_fake.return_val = 231;
+	hih8120_getHumidityPercent_x10_fake.return_val = 761;
+
+	int16_t tempArr[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 0 };
+	int16_t humArr[10] = { 760, 764, 762, 764, 805, 760, 762, 764, 764, 0 };
+
+	uint8_t index = 9;
+
+	// Act
+	// missing the last sample, then calling the weigthed average
+	tempHum_task_run(tempArr, humArr, &index);
+
+	ASSERT_EQ(tempHum_getStatusTemperature(), true);
+	ASSERT_EQ(tempHum_getStatusHumidity(), true);
+}
+
+TEST_F(TempHumTest, tempHum_status_CantWakeup) {
+	//Arrange
+	hih8120_wakeup_fake.return_val = HIH8120_TWI_BUSY;
+	hih8120_measure_fake.return_val = HIH8120_OK;
+
+	hih8120_getTemperature_x10_fake.return_val = 231;
+	hih8120_getHumidityPercent_x10_fake.return_val = 761;
+
+	int16_t tempArr[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 0 };
+	int16_t humArr[10] = { 760, 764, 762, 764, 805, 760, 762, 764, 764, 0 };
+
+	uint8_t index = 9;
+
+	// Act
+	// missing the last sample, then calling the weigthed average
+	tempHum_task_run(tempArr, humArr, &index);
+
+	ASSERT_EQ(tempHum_getStatusTemperature(), false);
+	ASSERT_EQ(tempHum_getStatusHumidity(), false);
+}
+
+TEST_F(TempHumTest, tempHum_status_) {
+	//Arrange
+	hih8120_wakeup_fake.return_val = HIH8120_OK;
+	hih8120_measure_fake.return_val = HIH8120_OUT_OF_HEAP;
+
+	hih8120_getTemperature_x10_fake.return_val = 231;
+	hih8120_getHumidityPercent_x10_fake.return_val = 761;
+
+	int16_t tempArr[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 0 };
+	int16_t humArr[10] = { 760, 764, 762, 764, 805, 760, 762, 764, 764, 0 };
+
+	uint8_t index = 9;
+
+	// Act
+	// missing the last sample, then calling the weigthed average
+	tempHum_task_run(tempArr, humArr, &index);
+
+	//ASSERT
+	ASSERT_EQ(tempHum_getStatusTemperature(), false);
+	ASSERT_EQ(tempHum_getStatusHumidity(), false);
+}
+
+
+

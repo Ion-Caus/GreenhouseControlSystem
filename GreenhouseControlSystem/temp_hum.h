@@ -33,6 +33,9 @@ void tempHum_task_create(void);
  */
 void tempHum_driver_destroy(void);
 
+/**
+ * Check the status of the sensor's temperature and humidity measuring modules
+ */
 bool tempHum_getStatusTemperature();
 bool tempHum_getStatusHumidity();
 

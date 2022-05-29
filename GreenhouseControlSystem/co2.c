@@ -79,7 +79,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	
 	co2_wakeupAndMeasure(&co2);
 	
-	if (co2 > MAX_CO2) 
+	if (co2 > MAX_CO2 || co2 == 0) 
 	{
 		return; // if co2 exceeds the norm
 	}
@@ -137,7 +137,7 @@ void co2_initDriver() {
 }
 
 
-void co2_createTask(void) {
+void co2_task_create(void) {
 	
 	co2_initDriver();
 	
