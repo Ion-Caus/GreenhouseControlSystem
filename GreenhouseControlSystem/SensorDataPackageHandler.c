@@ -34,7 +34,7 @@ void sensorDataPackage_setMoistures(uint8_t* moistures){
 	
 }
 
-void sensorDataPackage_setStatus(char status){
+void sensorDataPackage_setStatus(uint8_t status){
 	sensordata.status = status;
 }
 

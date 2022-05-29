@@ -14,4 +14,5 @@
  */
 void upLinkHandler_task_create(void);
 
-void upLnkHandler_task_run(uint8_t* packageBuffer);
+// for testing
+void upLinkHandler_task_run(uint8_t* packageBuffer);

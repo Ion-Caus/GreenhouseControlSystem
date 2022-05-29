@@ -20,6 +20,7 @@
 #include "lorawanConfig.h"
 #include "config.h"
 
+#define NR_BYTES_TO_SWAP		(6)
 
 extern MessageBufferHandle_t upLinkBuffer;
 
@@ -36,30 +37,46 @@ static void _lora_setup(void)
 	status_leds_slowBlink(led_ST2); // OPTIONAL: Led the green led blink slowly while we are setting up LoRa
 
 	// Factory reset the transceiver
-	printf("FactoryReset >%s<\n", lora_driver_mapReturnCodeToText(lora_driver_rn2483FactoryReset()));
+	rc = lora_driver_rn2483FactoryReset();
+	#if DEV_ENV
+		printf("FactoryReset >%s<\n", lora_driver_mapReturnCodeToText(rc));
+	#endif
 	
 	// Configure to EU868 LoRaWAN standards
-	printf("Configure to EU868 >%s<\n", lora_driver_mapReturnCodeToText(lora_driver_configureToEu868()));
-
+	rc = lora_driver_configureToEu868();
+	#if DEV_ENV
+		printf("Configure to EU868 >%s<\n", lora_driver_mapReturnCodeToText(rc));
+	#endif
+	
 	// Get the transceivers HW EUI
 	rc = lora_driver_getRn2483Hweui(_out_buf);
-	printf("Get HWEUI >%s<: %s\n",lora_driver_mapReturnCodeToText(rc), _out_buf);
+	#if DEV_ENV
+		printf("Get HWEUI >%s<: %s\n",lora_driver_mapReturnCodeToText(rc), _out_buf);
+	#endif
 
 	// Set the HWEUI as DevEUI in the LoRaWAN software stack in the transceiver
-	printf("Set DevEUI: %s >%s<\n", _out_buf, lora_driver_mapReturnCodeToText(lora_driver_setDeviceIdentifier(_out_buf)));
-
+	rc = lora_driver_setDeviceIdentifier(_out_buf);
+	#if DEV_ENV
+		printf("Set DevEUI: %s >%s<\n", _out_buf, lora_driver_mapReturnCodeToText(rc));
+	#endif
+	
 	// Set Over The Air Activation parameters to be ready to join the LoRaWAN
 	rc = lora_driver_setOtaaIdentity(LORA_appEUI,LORA_appKEY,_out_buf);
 	printf("Set OTAA Identity appEUI:%s appKEY:%s devEUI:%s >%s<\n", LORA_appEUI, LORA_appKEY, _out_buf, lora_driver_mapReturnCodeToText(rc));
 
 	// Save all the MAC settings in the transceiver
-	printf("Save mac >%s<\n",lora_driver_mapReturnCodeToText(lora_driver_saveMac()));
+	rc = lora_driver_saveMac();
+	printf("Save mac >%s<\n",lora_driver_mapReturnCodeToText(rc));
 
 	// Enable Adaptive Data Rate
-	printf("Set Adaptive Data Rate: ON >%s<\n", lora_driver_mapReturnCodeToText(lora_driver_setAdaptiveDataRate(LORA_ON)));
+	rc = lora_driver_setAdaptiveDataRate(LORA_ON);
+	#if DEV_ENV
+		printf("Set Adaptive Data Rate: ON >%s<\n", lora_driver_mapReturnCodeToText(rc));
+	#endif
 
 	// Set receiver window1 delay to 500 ms - this is needed if down-link messages will be used
-	printf("Set Receiver Delay: %d ms >%s<\n", 500, lora_driver_mapReturnCodeToText(lora_driver_setReceiveDelay(500)));
+	rc = lora_driver_setReceiveDelay(500);
+	printf("Set Receiver Delay: %d ms >%s<\n", 500, lora_driver_mapReturnCodeToText(rc));
 
 	// Join the LoRaWAN
 	uint8_t maxJoinTriesLeft = 10;
@@ -144,9 +161,14 @@ void upLinkHandler_task_run(uint8_t* packageBuffer)
 	#endif
 	
 	// coping the package into the payload
+
 	for (uint8_t i = 0; i < bytesReceived; i++) {
-		// swapping little endian into big endian
-		uint8_t index = (i % 2 == 0) ? i+1 : i-1;
+		uint8_t index = i;
+		if (i < NR_BYTES_TO_SWAP) {
+			// swapping little endian into big endian for the first 6 bytes
+			index = (i % 2 == 0) ? i + 1 : i - 1;
+		}
+		
 		_uplink_payload.bytes[i] = packageBuffer[index];
 	}
 

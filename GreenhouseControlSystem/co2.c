@@ -75,7 +75,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 		portMAX_DELAY
 	);
 	
-	uint16_t co2 = 0;
+	uint16_t co2 = 0;	
 	
 	co2_wakeupAndMeasure(&co2);
 	
