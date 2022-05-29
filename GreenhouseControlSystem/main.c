@@ -54,7 +54,7 @@ void structures_create() {
 void tasks_create() {
 	application_task_create();
 	tempHum_task_create();
-	co2_createTask();
+	co2_task_create();
 	moisture_task_create();
 }
 
