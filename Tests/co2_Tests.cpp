@@ -5,6 +5,7 @@
 extern "C"
 {
 #include "co2.h"
+#include "sensorConfig.h"
 #include <FreeRTOS_FFF_MocksDeclaration.h>
 #include <task.h>
 #include <semphr.h>
