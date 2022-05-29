@@ -71,6 +71,16 @@ TEST_F(ApplicationTest, application_test_dataPackage) {
 
 }
 
+TEST_F(ApplicationTest, application_test_measuremen_status) {
+
+	// make the task run
+	application_task_run();
+
+	//Only moisture should be returning true without being able to mock the other sensors
+	ASSERT_EQ(sensorDataPackage_getSensorData().status, MOISTURE_STATUS);
+
+}
+
 TEST_F(ApplicationTest, application_test_messagebufferIsEmpty) {
 
 	xMessageBufferIsEmpty_fake.return_val = 1;
