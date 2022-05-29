@@ -39,13 +39,14 @@
   <ItemGroup>
     <ClCompile Include="..\GreenhouseControlSystem\downLinkHandler.c" />
     <ClCompile Include="..\GreenhouseControlSystem\temp_hum.c" />
+    <ClCompile Include="..\GreenhouseControlSystem\upLinkHandler_LoraWAN.c" />
     <ClCompile Include="..\GreenhouseControlSystem\weighted_average.c" />
     <ClCompile Include="downlinkHandlerTests.cpp" />
     <ClCompile Include="fff_mockFreeRTOS\VIAFreeRTOSTest\FreeRTOS_FFF_MocksDefinitions.cpp" />
     <ClCompile Include="..\GreenhouseControlSystem\moisture.c" />
     <ClCompile Include="moistureTests.cpp" />
     <ClCompile Include="tempHum_Tests.cpp" />
-    <ClCompile Include="test.cpp" />
+    <ClCompile Include="upLinkTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

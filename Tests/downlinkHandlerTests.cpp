@@ -1,5 +1,5 @@
 /*
- * tempHum_Test.cpp
+ * downLinkTests.cpp
  *
  * Created: 5/22/2022 10:13:23 AM
  * Author: ionc
@@ -43,7 +43,7 @@ protected:
 
 
 // fake recieve function for message buffer for the test - downlink_bytes_to_int
-size_t messageBufferReceive(MessageBufferHandle_t arg0, void* arg1, size_t arg2, TickType_t arg3)
+static size_t messageBufferReceive(MessageBufferHandle_t arg0, void* arg1, size_t arg2, TickType_t arg3)
 {
 	const uint8_t len = 8;
 						// 150		295		200		1400
