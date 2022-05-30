@@ -56,7 +56,7 @@ void application_task_run()
 		xFrequency
 		);
 	
-	//once the measure tasks timed out, pause
+	//once the measure tasks are ready or application task timed out, pause the measure tasks
 	xEventGroupClearBits(measureEventGroup, bits);
 	
 	uint8_t status = 0;
