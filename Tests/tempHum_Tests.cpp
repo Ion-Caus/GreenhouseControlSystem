@@ -15,7 +15,6 @@ extern "C" {
 	#include <semphr.h>
 	#include <hih8120.h>
 	#include <stdio_driver.h>
-	#include "weighted_average.h"
 }
 
 FAKE_VALUE_FUNC(hih8120_driverReturnCode_t, hih8120_initialise);
@@ -42,17 +41,6 @@ protected:
 	void TearDown() override {}
 };
 
-
-TEST_F(TempHumTest, calculate_weighted_average_tempHum) {
-	// Arrange
-	int16_t samples[10] = { 230, 234, 232, 234, 290, 230, 232, 234, 234, 231 };
-
-	// Act
-	int16_t weightedAverage = weightedAverage_calculate(samples, 10);
-
-	// Assert
-	ASSERT_EQ(weightedAverage, 237); // 23.7 
-}
 
 
 

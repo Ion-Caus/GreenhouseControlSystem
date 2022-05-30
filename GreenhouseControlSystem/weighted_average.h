@@ -13,8 +13,6 @@
 #include <semphr.h>
 
 
-SemaphoreHandle_t avg_calc_mutex;
-
 /**
  * Create the semaphore mutex, so 
  * that only one task is using it

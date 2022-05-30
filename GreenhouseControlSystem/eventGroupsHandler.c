@@ -7,6 +7,10 @@
 
 #include "eventGroupsHandler.h"
 
+EventGroupHandle_t measureEventGroup;
+
+EventGroupHandle_t readingsReadyEventGroup;
+
 void eventGroupsHandler_create(void)
 {
 	measureEventGroup = xEventGroupCreate();

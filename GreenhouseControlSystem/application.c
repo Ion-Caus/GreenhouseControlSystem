@@ -53,7 +53,7 @@ void application_task_run()
 		bits,
 		pdTRUE,
 		pdTRUE,
-		APPICATION_TASK_DELAY_MS
+		xFrequency
 		);
 	
 	//once the measure tasks are ready pause them

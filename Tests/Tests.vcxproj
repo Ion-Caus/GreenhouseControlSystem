@@ -37,9 +37,11 @@
     <IncludePath>$(SolutionDir)Tests\fff_mockFreeRTOS\fff;$(SolutionDir)Tests\fff_mockFreeRTOS\VIAFreeRTOSTest;$(SolutionDir)GreenhouseControlSystem\drivers;$(SolutionDir)GreenhouseControlSystem</IncludePath>
   </PropertyGroup>
   <ItemGroup>
+    <ClCompile Include="..\GreenhouseControlSystem\buffersHandler.c" />
     <ClCompile Include="..\GreenhouseControlSystem\downLinkHandler.c" />
     <ClCompile Include="..\GreenhouseControlSystem\application.c" />
     <ClCompile Include="..\GreenhouseControlSystem\co2.c" />
+    <ClCompile Include="..\GreenhouseControlSystem\eventGroupsHandler.c" />
     <ClCompile Include="..\GreenhouseControlSystem\sensorDataPackageHandler.c" />
     <ClCompile Include="..\GreenhouseControlSystem\temp_hum.c" />
     <ClCompile Include="..\GreenhouseControlSystem\upLinkHandler_LoraWAN.c" />
@@ -53,6 +55,7 @@
     <ClCompile Include="moistureTests.cpp" />
     <ClCompile Include="tempHum_Tests.cpp" />
     <ClCompile Include="upLinkTests.cpp" />
+    <ClCompile Include="weighted_average_Tests.cpp" />
     <ClCompile Include="window_Tests.cpp" />
   </ItemGroup>
   <ItemGroup>

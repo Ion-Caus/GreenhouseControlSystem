@@ -14,19 +14,19 @@
  * The message buffer used by the WindowController task,
  * that receives the latest sensor data package from the application task
  */
-MessageBufferHandle_t windowBuffer;
+extern MessageBufferHandle_t windowBuffer;
 
 /**
  * The message buffer used by the UplinkHandler task to create the Lora payload
  * and receives the latest sensor data package from the application task
  */
-MessageBufferHandle_t upLinkBuffer;
+extern MessageBufferHandle_t upLinkBuffer;
 
 /**
  * The message buffer used by the DownlinkHandler task,
  * that receives the thresholds from LoraWAN
  */
-MessageBufferHandle_t downLinkBuffer;
+extern MessageBufferHandle_t downLinkBuffer;
 
 
 /**
