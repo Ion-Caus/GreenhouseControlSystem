@@ -6,7 +6,6 @@
  */ 
 
 #include <ATMEGA_FreeRTOS.h>
-#include <lora_driver.h>
 #include <rc_servo.h>
 #include <stdio.h>
 
@@ -34,14 +33,14 @@ void window_task_run(measurements_t receivedData, int8_t* percent)
 	
  	printf("Received message from window buffer\n");
 	
-	//int16_t	minTemp = thresholdMutex_getTemperatureLower();
+	int16_t	minTemp = thresholdMutex_getTemperatureLower();
 	int16_t	maxTemp = thresholdMutex_getTemperatureUpper();
 	uint16_t maxCo2 = thresholdMutex_getCo2Upper();
 	
 	// before threshold values are received, numbers are just maximum of our greenhouse, from -20 to 60 degrees
 	// servo is going to act only on temperature and co2 levels, where temperature is of a higher priority
 		
-	if (receivedData.temperature < maxTemp * WINDOW_CLOSE_MARGIN) {
+	if (receivedData.temperature < (minTemp + ((maxTemp-minTemp) * WINDOW_CLOSE_MARGIN))) {
 		*percent = 0; // close window fully - too cold
 	}
 	else if (receivedData.temperature >= maxTemp * WINDOW_HALF_MARGIN && receivedData.temperature <= maxTemp) {

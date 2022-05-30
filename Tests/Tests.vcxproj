@@ -44,6 +44,7 @@
     <ClCompile Include="..\GreenhouseControlSystem\temp_hum.c" />
     <ClCompile Include="..\GreenhouseControlSystem\upLinkHandler_LoraWAN.c" />
     <ClCompile Include="..\GreenhouseControlSystem\weighted_average.c" />
+    <ClCompile Include="..\GreenhouseControlSystem\window.c" />
     <ClCompile Include="downlinkHandlerTests.cpp" />
     <ClCompile Include="application_Tests.cpp" />
     <ClCompile Include="co2_Tests.cpp" />
@@ -52,6 +53,7 @@
     <ClCompile Include="moistureTests.cpp" />
     <ClCompile Include="tempHum_Tests.cpp" />
     <ClCompile Include="upLinkTests.cpp" />
+    <ClCompile Include="window_Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
