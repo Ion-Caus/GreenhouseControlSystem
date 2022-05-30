@@ -180,6 +180,9 @@
     <Compile Include="eventGroupsHandler.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="sensorConfig.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="thresholdConfiguration.c">
       <SubType>compile</SubType>
     </Compile>
@@ -262,6 +265,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="weighted_average.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="window.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="window.h">
       <SubType>compile</SubType>
     </Compile>
     <None Include="FreeRTOS\Example\main.c.example">

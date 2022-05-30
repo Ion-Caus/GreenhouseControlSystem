@@ -12,6 +12,8 @@
 
 #include "weighted_average.h"
 
+static SemaphoreHandle_t avg_calc_mutex;
+
 void weightedAverage_createMutex(void) {
 	avg_calc_mutex = xSemaphoreCreateMutex();
 	

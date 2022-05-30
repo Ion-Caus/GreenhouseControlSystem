@@ -9,6 +9,7 @@
 #include "ATMEGA_FreeRTOS.h"
 #include <semphr.h>
 #include <limits.h>
+#include "thresholdConfiguration.h"
 
 static int16_t temperatureThresholdUpper;
 static int16_t temperatureThresholdLower;
@@ -19,10 +20,10 @@ static SemaphoreHandle_t lock;
 
 void thresholdMutex_create(){
 	lock = xSemaphoreCreateMutex();	
-	temperatureThresholdLower = 0;
-	temperatureThresholdUpper = SHRT_MAX;
+	temperatureThresholdLower = TEMP_MIN_THRESHOLD;
+	temperatureThresholdUpper = TEMP_MAX_THRESHOLD;
 	CO2ThresholdLower = 0;
-	CO2ThresholdUpper = USHRT_MAX;
+	CO2ThresholdUpper = CO2_MAX_THRESHOLD;
 }
 
 int16_t thresholdMutex_getTemperatureUpper(){

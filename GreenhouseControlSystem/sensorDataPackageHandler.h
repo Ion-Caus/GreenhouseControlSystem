@@ -9,8 +9,8 @@
 #pragma once
 
 #include <stdint.h>
-#include "moisture.h"
 #include "lora_driver.h"
+#include "sensorConfig.h"
 
 #define TEMP_STATUS			(1<<0)
 #define HUM_STATUS			(1<<1)

@@ -51,8 +51,12 @@ void downLinkHandler_task_run()
 	int16_t tempMin = loraPayload.bytes[1] | loraPayload.bytes[0] << 8;
 	int16_t tempMax = loraPayload.bytes[3] | loraPayload.bytes[2] << 8;
 	
+	if (!tempMax) tempMax = TEMP_MAX_THRESHOLD;
+	
 	uint16_t co2Min = loraPayload.bytes[5] | loraPayload.bytes[4] << 8;
 	uint16_t co2Max = loraPayload.bytes[7] | loraPayload.bytes[6] << 8;
+	
+	if (!co2Max) co2Max = CO2_MAX_THRESHOLD;
 	
 	puts("Updating the Thresholds.\n");
 	

@@ -24,6 +24,7 @@
 #include "co2.h"
 #include "weighted_average.h"
 #include "moisture.h"
+#include "window.h"
 
 #include "config.h"
 #include "lorawanConfig.h"
@@ -56,6 +57,7 @@ void tasks_create() {
 	tempHum_task_create();
 	co2_task_create();
 	moisture_task_create();
+	window_task_create();
 }
 
 /*-----------------------------------------------------------*/

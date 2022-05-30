@@ -9,6 +9,7 @@
 
 extern "C" {
 	#include "moisture.h"
+	#include "sensorConfig.h"
 	#include <ATMEGA_FreeRTOS.h>
 	#include <task.h>
 	#include <semphr.h>

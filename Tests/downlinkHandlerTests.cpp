@@ -95,3 +95,40 @@ TEST_F(DownlinkTest, downlink_task_run_Zero_bytes_received) {
 	ASSERT_EQ(thresholdMutex_setCo2Lower_fake.call_count, 0);
 	ASSERT_EQ(thresholdMutex_setCo2Upper_fake.call_count, 0);
 }
+
+
+static size_t messageBufferReceive_NullThresholds(MessageBufferHandle_t arg0, void* arg1, size_t arg2, TickType_t arg3)
+{
+	const uint8_t len = 8;
+	uint8_t bytes[len] = { 0, 0, 0, 0, 0, 0, 0, 0 }; 
+
+	void* pos = arg1;
+
+	((uint8_t*)arg1)[0] = 1; // portNo
+	((uint8_t*)arg1)[1] = 8; // len
+
+	for (size_t i = 2; i < len + 2; i++)
+	{
+		((uint8_t*)arg1)[i] = bytes[i - 2];
+	}
+
+	arg1 = pos;
+	return len + 2;
+}
+
+TEST_F(DownlinkTest, downlink_task_run_null_max_thresholds) {
+	//Arrange
+	xMessageBufferReceive_fake.custom_fake = messageBufferReceive_NullThresholds;
+
+	// Act
+	downLinkHandler_task_run();
+
+	// Assert
+	ASSERT_EQ(xMessageBufferReceive_fake.call_count, 1);
+
+	ASSERT_EQ(thresholdMutex_setTempLower_fake.arg0_val, 0);
+	ASSERT_EQ(thresholdMutex_setTempUpper_fake.arg0_val, 600); // 60.0 C
+	ASSERT_EQ(thresholdMutex_setCo2Lower_fake.arg0_val, 0); // ppm
+	ASSERT_EQ(thresholdMutex_setCo2Upper_fake.arg0_val, 5000); // ppm
+
+}

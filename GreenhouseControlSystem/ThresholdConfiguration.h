@@ -9,6 +9,11 @@
 #pragma once
 
 #include <stdint.h>
+#include "sensorConfig.h"
+
+#define TEMP_MIN_THRESHOLD			(MIN_TEMPERATURE)
+#define TEMP_MAX_THRESHOLD			(MAX_TEMPERATUE)
+#define CO2_MAX_THRESHOLD			(MAX_CO2)
 
 /*
  * Create the mutex for the Thresholds

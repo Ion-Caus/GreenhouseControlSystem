@@ -22,13 +22,13 @@
  * The event group controlled by the application task, 
  * used to sync when sensors task must measure.
  */
-EventGroupHandle_t measureEventGroup;
+extern EventGroupHandle_t measureEventGroup;
 
 /**
  * The event group used to when sensors tasks have ready data,
  * and application task can retrieve it.
  */
-EventGroupHandle_t readingsReadyEventGroup;
+extern EventGroupHandle_t readingsReadyEventGroup;
 
 
 /**

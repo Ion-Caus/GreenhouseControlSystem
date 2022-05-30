@@ -11,11 +11,16 @@
 #include "lora_driver.h"
 #include "sensorDataPackageHandler.h"
 
-// TODO: find if needed to be moved to .h
 #define SIZE_WINDOW_BUFFER				( sizeof(measurements_t) * 2 )
 #define SIZE_UPLINK_BUFFER				( sizeof(measurements_t) * 2 )
 #define SIZE_DOWNLINK_BUFFER			( sizeof(lora_driver_payload_t) * 2 )
 
+
+MessageBufferHandle_t windowBuffer;
+
+MessageBufferHandle_t upLinkBuffer;
+
+MessageBufferHandle_t downLinkBuffer;
 
 void buffersHandler_create() 
 {

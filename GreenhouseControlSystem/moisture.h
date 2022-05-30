@@ -10,16 +10,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define POT_COUNT					(6)
-#define POT_DELAY_MS				(80)
-
-											// lower number means the change is faster and vice versa
-#define CHANGE_SPEED_INVERSE		(40)	// number higher then 200 will make the temperatures not change at all
-
-#define TOP_MOISTURE				(70 - 1) // the minus one is for buffer
-#define LOW_MOISTURE				(40 + 1) // the plus one is for buffer
-
-
 /**
  * Get an array of size 6, containing moisture samples.
  * The index of the value in the array is the id of the pod.

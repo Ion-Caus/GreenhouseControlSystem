@@ -3,14 +3,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define MIN_TEMPERATURE				(-20 * 10)
-#define MAX_TEMPERATUE				(60  * 10)
-
-#define MAX_HUMIDITY				(100 * 10) // 100%
-
-#define TEMP_HUM_ARRAY_SIZE			(10)
-
-
 /**
  * Get the weighted average of the temperature as x10
  * e.g 25.3 -> 253

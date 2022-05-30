@@ -20,6 +20,7 @@
 #include "eventGroupsHandler.h"
 #include "weighted_average.h"
 #include "config.h"
+#include "sensorConfig.h"
 
 
 extern EventGroupHandle_t measureEventGroup;
