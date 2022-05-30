@@ -56,23 +56,24 @@ void application_task_run()
 		xFrequency
 		);
 	
-	//once the measure tasks are ready pause them
+	//once the measure tasks timed out, pause
 	xEventGroupClearBits(measureEventGroup, bits);
 	
-	//getting the calculated temperature from the sensor
 	uint8_t status = 0;
+	
+	//getting status and calculating temperature from the sensor
 	if(tempHum_getStatusTemperature()) status |= TEMP_STATUS;
 	int16_t measuredTemperature = tempHum_getTemperature();
 		
-	//getting the calculated temperature from the sensor
+	//getting status and calculating humidity from the sensor
 	if(tempHum_getStatusHumidity()) status |= HUM_STATUS;
 	uint16_t measuredHumidity = tempHum_getHumidity();
 	
-	//getting moisture array from sensor
+	//getting status and calculating moisture from the sensor
 	if(moisture_getStatus()) status |= MOISTURE_STATUS;
 	uint8_t* measuredMoisture = moisture_getMoistures();
 	
-	//getting co2 from sensor
+	//getting status and calculating co2 from the sensor
 	if(co2_getCo2()) status |= CO2_STATUS;
 	uint16_t measuredCo2 = co2_getCo2();
 	

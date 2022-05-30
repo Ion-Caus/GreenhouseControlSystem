@@ -71,7 +71,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 {
 	xEventGroupWaitBits(measureEventGroup,
 		BIT_TASK_CO2,
-		pdFALSE, //clear the bit so measurement will happen just after someone request it again
+		pdFALSE,
 		pdTRUE,
 		portMAX_DELAY
 	);
@@ -105,7 +105,7 @@ void co2_task_run(int16_t* co2Array, uint8_t* index)
 	weightedCo2 = weightedAverage_calculate(co2Array, CO2_ARRAY_SIZE);
 	printf("Weighted average co2: %d\n", weightedCo2);
 	
-	// data ready to take
+	// data ready to be taken
 	xEventGroupSetBits(readingsReadyEventGroup, BIT_TASK_CO2);
 
 	xTaskDelayUntil(&xLastWakeTime, xFrequency);

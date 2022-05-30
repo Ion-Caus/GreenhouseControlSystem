@@ -43,7 +43,7 @@ void window_task_run(measurements_t receivedData, int8_t* percent)
 	if (receivedData.temperature < (minTemp + ((maxTemp-minTemp) * WINDOW_CLOSE_MARGIN))) {
 		*percent = 0; // close window fully - too cold
 	}
-	else if (receivedData.temperature >= maxTemp * WINDOW_HALF_MARGIN && receivedData.temperature <= maxTemp) {
+	else if (receivedData.temperature >= (minTemp + ((maxTemp-minTemp) * WINDOW_HALF_MARGIN)) && receivedData.temperature <= maxTemp) {
 		*percent = 50; // open window halfway
 	}
 	else if (receivedData.temperature > maxTemp || receivedData.co2 > maxCo2) {
@@ -65,7 +65,7 @@ void window_task(void* pvParameter) {
 
 	measurements_t receivedData = { 0 };
 		
-	rc_servo_setPosition(SERVO_NO, percent); // window closed
+	rc_servo_setPosition(SERVO_NO, percent);
 
 	for (;;)
 	{

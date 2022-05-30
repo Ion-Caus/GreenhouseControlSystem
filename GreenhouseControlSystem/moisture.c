@@ -28,7 +28,7 @@ extern EventGroupHandle_t measureEventGroup;
 extern EventGroupHandle_t readingsReadyEventGroup;
 
 
-static uint8_t potsMoisture[POT_COUNT] = {55, 55, 55 ,55 ,55, 55}; // init values that we want to have
+static uint8_t potsMoisture[POT_COUNT] = {55, 55, 55 ,55 ,55, 55}; // default values
 
 
 uint8_t* moisture_getMoistures(){
@@ -42,7 +42,7 @@ uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
 	int8_t sign;
 	if (previousMeasurement > LOW_MOISTURE && previousMeasurement < TOP_MOISTURE)
 	{
-		sign = ( currentMeasurement % 3 ) - 1; //if it is even let the sign by -1 if odd let it be +1
+		sign = ( currentMeasurement % 3 ) - 1; // if it is even let the sign by -1 if odd let it be +1
 	}
 	else
 	{
@@ -58,7 +58,7 @@ uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
 void moisture_taskRun() {
 	xEventGroupWaitBits(measureEventGroup,
 		BIT_TASK_MOIST,
-		pdFALSE,	//clear the bit so measurement will happen just after someone request it again
+		pdFALSE,
 		pdTRUE,
 		portMAX_DELAY
 	);
@@ -70,7 +70,7 @@ void moisture_taskRun() {
 		//make the task wait some time so there will be differences between different faked measurements
 		vTaskDelay(pdMS_TO_TICKS(POT_DELAY_MS));
 		
-		tempArr[i] =  _fake_moisture_measurement(potsMoisture[i]); //the measurements made quite big difference so I divided it by 8
+		tempArr[i] =  _fake_moisture_measurement(potsMoisture[i]);
 	}
 	
 	for (uint8_t i = 0; i < POT_COUNT; i++) {

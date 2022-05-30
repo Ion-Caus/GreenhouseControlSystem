@@ -13,7 +13,7 @@
 #define LORA_appKEY "B90973872CFD40F5E380185AD43FC18C"
 
 #define UPLINK_PAYLOAD_LEN			(sizeof(measurements_t))
-#define UPLINK_PAYLOAD_PORTNO		(6)
+#define UPLINK_PAYLOAD_PORTNO		(7)
 
 #define DOWNLINK_COM_PORT			(1)
 
