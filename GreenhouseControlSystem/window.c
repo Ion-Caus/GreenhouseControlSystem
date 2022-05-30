@@ -63,7 +63,7 @@ void window_task(void* pvParameter) {
 	
 	xLastWakeTime = xTaskGetTickCount();
 
-	measurements_t receivedData;
+	measurements_t receivedData = { 0 };
 		
 	rc_servo_setPosition(SERVO_NO, percent); // window closed
 

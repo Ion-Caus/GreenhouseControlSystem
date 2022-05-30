@@ -10,8 +10,8 @@
 
 #define SERVO_NO  ( 0 ) // servo J14
 
-#define WINDOW_CLOSE_MARGIN			(0.75)
-#define WINDOW_HALF_MARGIN			(0.9)
+#define WINDOW_CLOSE_MARGIN			(0.8)
+#define WINDOW_HALF_MARGIN			(0.95) 
 
 /**
  * Create the Window task and init the servo driver

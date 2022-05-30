@@ -52,13 +52,83 @@ TEST_F(WindowTest, init_servo_driver) {
 
 TEST_F(WindowTest, window_setPosition) {
 
-	uint8_t servoNo = 0;
+	// arrange
 	int8_t percent = 50;
-	rc_servo_setPosition(servoNo, percent);
+	measurements_t receivedData = { 0 };
 
+	// act
+	window_task_run(receivedData, &percent);
+
+	// assert
 	ASSERT_EQ(rc_servo_setPosition_fake.call_count, 1);
-	ASSERT_EQ(rc_servo_setPosition_fake.arg0_val, 0);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg0_val, SERVO_NO);
 	ASSERT_EQ(rc_servo_setPosition_fake.arg1_val, 50);
+}
+
+TEST_F(WindowTest, run_window_task_close_window) {
+	// arrage
+	measurements_t receivedData;
+	receivedData.temperature = 301;
+	receivedData.co2 = 998;
+
+	int8_t percent = 50; // open half way
+	
+	thresholdMutex_getTemperatureUpper_fake.return_val = 350; // max
+	thresholdMutex_getTemperatureLower_fake.return_val = 300; // min
+	thresholdMutex_getCo2Upper_fake.return_val = 1500;
+
+
+	// act
+	window_task_run(receivedData, &percent);
+
+	// assert
+	ASSERT_EQ(rc_servo_setPosition_fake.call_count, 1);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg0_val, SERVO_NO);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg1_val, 0); // closing the window
+}
+
+TEST_F(WindowTest, run_window_task_openWindow_maring_upperThreshold) {
+	// arrage
+	measurements_t receivedData;
+	receivedData.temperature = 345;
+	receivedData.co2 = 998;
+
+	int8_t percent = 0;
+
+	thresholdMutex_getTemperatureUpper_fake.return_val = 350; // max
+	thresholdMutex_getTemperatureLower_fake.return_val = 300; // min
+	thresholdMutex_getCo2Upper_fake.return_val = 1500;
+
+
+	// act
+	window_task_run(receivedData, &percent);
+
+	// assert
+	ASSERT_EQ(rc_servo_setPosition_fake.call_count, 1);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg0_val, SERVO_NO);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg1_val, 50); // open half way the window
+}
+
+TEST_F(WindowTest, run_window_task_openFullWindow) {
+	// arrage
+	measurements_t receivedData;
+	receivedData.temperature = 385;
+	receivedData.co2 = 998;
+
+	int8_t percent = 50; // open half way
+
+	thresholdMutex_getTemperatureUpper_fake.return_val = 350; // max
+	thresholdMutex_getTemperatureLower_fake.return_val = 300; // min
+	thresholdMutex_getCo2Upper_fake.return_val = 1500;
+
+
+	// act
+	window_task_run(receivedData, &percent);
+
+	// assert
+	ASSERT_EQ(rc_servo_setPosition_fake.call_count, 1);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg0_val, SERVO_NO);
+	ASSERT_EQ(rc_servo_setPosition_fake.arg1_val, 100); // open half way the window
 }
 
 
