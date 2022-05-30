@@ -53,13 +53,13 @@ void application_task_run()
 		bits,
 		pdTRUE,
 		pdTRUE,
-		APPICATION_TASK_DELAY_MS
+		xFrequency
 		);
 	
 	//once the measure tasks are ready pause them
 	xEventGroupClearBits(measureEventGroup, bits);
 	
-	//getting the calculated temperature from the sensor
+	//getting the status of temperature from the sensor
 	uint8_t status = 0;
 	if(tempHum_getStatusTemperature()) status |= TEMP_STATUS;
 	int16_t measuredTemperature = tempHum_getTemperature();
