@@ -21,11 +21,6 @@ uint16_t tempHum_getHumidity(void);
 void tempHum_task_create(void);
 
 /**
- * Create the TempHum task and init the hih8120 driver
- */
-void tempHum_driver_destroy(void);
-
-/**
  * Check the status of the sensor's temperature and humidity measuring modules
  */
 bool tempHum_getStatusTemperature();

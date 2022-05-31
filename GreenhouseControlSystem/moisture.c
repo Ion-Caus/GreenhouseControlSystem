@@ -39,10 +39,12 @@ uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
 	
 	uint16_t currentMeasurement = sen14262_envelope();
 	
-	int8_t sign;
+	int8_t sign; //sign represents if value will increase decrease or say same
+	
 	if (previousMeasurement > LOW_MOISTURE && previousMeasurement < TOP_MOISTURE)
 	{
-		sign = ( currentMeasurement % 3 ) - 1; // if it is even let the sign by -1 if odd let it be +1
+		// if it is divisible by 3 let the sign by -1 if reminder is 2 let it be +1, else have 0 and not move it
+		sign = ( currentMeasurement % 3 ) - 1; 
 	}
 	else
 	{
@@ -51,7 +53,9 @@ uint8_t _fake_moisture_measurement(uint8_t previousMeasurement){
 		: -1; // if it is too high don't make it even higher
 	}
 	
-	return previousMeasurement + (sign* ((int)(sqrt( currentMeasurement / CHANGE_SPEED_INVERSE ))));
+	uint8_t moistureOffset = (int)(sqrt( currentMeasurement / CHANGE_SPEED_INVERSE ));
+	
+	return previousMeasurement + (sign* (moistureOffset));
 }
 
 

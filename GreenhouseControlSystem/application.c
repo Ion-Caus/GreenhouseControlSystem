@@ -89,16 +89,23 @@ void application_task_run()
 	measurements_t package = sensorDataPackage_getSensorData();
 	puts("Application task got the data package\n");
 	
+	#if BUFFER_RESET
 	if (!xMessageBufferIsEmpty(upLinkBuffer)) {
 		// reset the buffer to override the payload
 		xMessageBufferReset(upLinkBuffer);
 	}
+	#endif
 	
 	//sending the package to upLink buffer
 	size_t sentBytes = xMessageBufferSend(upLinkBuffer,
 		(void*)&package,
 		sizeof(measurements_t),
-		portMAX_DELAY);
+		#if BUFFER_RESET
+		portMAX_DELAY
+		#else
+		0
+		#endif
+		);
 
 	printf("Sent data package to upLink buffer, sent bytes =%d\n", sentBytes);
 	

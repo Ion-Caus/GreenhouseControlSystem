@@ -44,3 +44,4 @@
 
 // === Dev envoriment ===
 #define DEV_ENV											( 0 ) // put 1 for printouts
+#define BUFFER_RESET									( 0 ) //put one to have message buffer to uplink reseted

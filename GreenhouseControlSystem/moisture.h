@@ -21,6 +21,9 @@ uint8_t* moisture_getMoistures(void);
  */
 void moisture_task_create(void);
 
+/**
+ * As this is fake sensor for now it always return true
+ */
 bool moisture_getStatus();
 
 // for testing
