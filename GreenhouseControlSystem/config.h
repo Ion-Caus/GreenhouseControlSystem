@@ -2,7 +2,7 @@
  * config.h
  *
  * Created: 5/24/2022 12:14:50 AM
- *  Author: ionc
+ *  Author: ionc, deniss, lukas, alex
  */ 
 
 #pragma once

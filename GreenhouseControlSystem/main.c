@@ -1,6 +1,6 @@
 /*
 * main.c
-* Author : ionc
+* Author : ionc, deniss, lukas, alex
 *
 */
 

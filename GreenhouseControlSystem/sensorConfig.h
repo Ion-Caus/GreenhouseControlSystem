@@ -2,7 +2,7 @@
  * sensorConfig.h
  *
  * Created: 29/05/2022 16.26.26
- *  Author: alex
+ *  Author: alex, deniss, lukas, ionc
  */ 
 
 

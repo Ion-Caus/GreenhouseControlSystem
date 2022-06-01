@@ -2,7 +2,7 @@
  * eventGroupsHandler.c
  *
  * Created: 5/23/2022 11:37:00 PM
- *  Author: ionc
+ *  Author: ionc, deniss
  */ 
 
 #include "eventGroupsHandler.h"

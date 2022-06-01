@@ -20,8 +20,15 @@
  */
 void thresholdMutex_create();
 
+/*
+* temperature thresholds returned in degrees Celsius
+*/
 int16_t thresholdMutex_getTemperatureUpper();
 int16_t thresholdMutex_getTemperatureLower();
+
+/*
+* Co2 thresholds returned in ppm (parts per million)
+*/
 uint16_t thresholdMutex_getCo2Upper();
 uint16_t thresholdMutex_getCo2Lower();
 
