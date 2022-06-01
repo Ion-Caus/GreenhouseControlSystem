@@ -183,7 +183,3 @@ bool tempHum_getStatusTemperature() {
 bool tempHum_getStatusHumidity() {
 	return isWorking;
 }
- 
-void tempHum_driver_destroy() {
-	//hih8120_destroy();
-}

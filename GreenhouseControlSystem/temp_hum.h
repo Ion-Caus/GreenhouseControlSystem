@@ -1,3 +1,10 @@
+/*
+ * temperature.h
+ *
+ * Created: 4/29/2022 11:26:27 PM
+ *  Author: ionc & alex
+ */ 
+
 #pragma once
 
 #include <stdint.h>
@@ -19,11 +26,6 @@ uint16_t tempHum_getHumidity(void);
  * Create the TempHum task and init the hih8120 driver
  */
 void tempHum_task_create(void);
-
-/**
- * Create the TempHum task and init the hih8120 driver
- */
-void tempHum_driver_destroy(void);
 
 /**
  * Check the status of the sensor's temperature and humidity measuring modules

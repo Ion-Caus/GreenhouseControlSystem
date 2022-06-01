@@ -2,7 +2,7 @@
  * config.h
  *
  * Created: 5/24/2022 12:14:50 AM
- *  Author: ionc
+ *  Author: ionc, deniss, lukas, alex
  */ 
 
 #pragma once
@@ -44,3 +44,4 @@
 
 // === Dev envoriment ===
 #define DEV_ENV											( 0 ) // put 1 for printouts
+#define BUFFER_RESET									( 0 ) //put one to have message buffer to uplink reseted

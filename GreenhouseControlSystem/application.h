@@ -14,4 +14,5 @@
  */
 void application_task_create(void);
 
+// for testing
 void application_task_run(void);
